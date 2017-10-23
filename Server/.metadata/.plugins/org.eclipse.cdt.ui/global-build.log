@@ -1,0 +1,15 @@
+15:23:43 **** Build of configuration Debug for project Server ****
+make all 
+Building file: ../src/Server.cpp
+Invoking: Cross G++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/Server.d" -MT"src/Server.d" -o "src/Server.o" "../src/Server.cpp"
+Finished building: ../src/Server.cpp
+ 
+Building target: Server
+Invoking: Cross G++ Linker
+g++  -o "Server"  ./src/Server.o   
+Finished building target: Server
+ 
+15:23:55 **** Incremental Build of configuration Debug for project Server ****
+make all 
+make: 对“all”无需做任何事。
