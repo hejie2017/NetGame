@@ -9,15 +9,10 @@
 //----------------------------------------------------------------*/
 
 #include "epoll_server.h"
-#include "net_util.h"
 #include "util.h"
-#include "world.h"
-
-using mogo::LogDebug;
 
 
-CEpollServer::CEpollServer() : m_epfd(0), m_fds(), the_world(NULL), m_unMailboxId(0), m_bShutdown(false), m_unMaxPlutoCount(0)
-
+CEpollServer::CEpollServer() : m_epfd(0), m_bShutdown(false), m_unMaxPlutoCount(0)
 {
 
 }
@@ -25,109 +20,133 @@ CEpollServer::CEpollServer() : m_epfd(0), m_fds(), the_world(NULL), m_unMailboxI
 
 CEpollServer::~CEpollServer()
 {
-    ClearMap(m_fds);
-	ClearContainer(m_mb4del);
+//    ClearMap(m_fds);
+//	ClearContainer(m_mb4del);
 }
 
 int CEpollServer::StartServer(const char* pszAddr, uint16_t unPort)
 {
-    m_strAddr.assign(pszAddr);
-    m_unPort = unPort;
+	m_strAddr.assign(pszAddr);
+	m_unPort = unPort;
 
-    int fd = MogoSocket();
-    if(fd == -1)
-    {
-        ERROR_RETURN2("Failed to create socket");
-    }
+	int fd = socket(PF_INET, SOCK_STREAM, 0);
+	if(fd == -1)
+	{
+		printf("desc=%s,file=%s,line=%d,errno=%d,err=%s\n", "Failed to create socket", __FILE__, __LINE__, errno, strerror(errno));
+		return -1;
+	}
 
-    MogoSetNonblocking(fd);
+	fcntl(fd, F_SETFL, fcntl(fd, F_GETFD, 0)|O_NONBLOCK);
 
 	//修改rcvbuf和sndbuf
 	enum{ _BUFF_SIZE = 174760 };
-	MogoSetBuffSize(fd, _BUFF_SIZE, _BUFF_SIZE);
+	setsockopt(fd, SOL_SOCKET, SO_RCVBUF, (const int*)&_BUFF_SIZE, sizeof(int));
+	setsockopt(fd, SOL_SOCKET, SO_SNDBUF, (const int*)&_BUFF_SIZE, sizeof(int));
 
-    int n = MogoBind(fd, pszAddr, unPort);
-    if(n != 0)
-    {
-        printf("bind fail, fd=%d;pszAddr=%s;unPort=%d\n", fd, pszAddr, unPort);
-        ERROR_RETURN2("Failed to bind");
-    }
+	struct sockaddr_in addr;
+	memset(&addr, 0, sizeof(addr));
+	addr.sin_family = PF_INET;
+	addr.sin_port = htons(unPort);
 
-    n = MogoListen(fd, 20);
-    if(n != 0)
-    {
-        ERROR_RETURN2("Failed to listen");
-    }
+	if(pszAddr == NULL || strcmp(pszAddr, "") == 0)
+	{
+		addr.sin_addr.s_addr = INADDR_ANY;
+	}
+	else
+	{
+		addr.sin_addr.s_addr = inet_addr(pszAddr);
+	}
 
-    m_epfd = epoll_create(MAX_EPOLL_SIZE);
-    if(m_epfd == -1)
-    {
-        ERROR_RETURN2("Failed to epoll_create");
-    }
+	int flag = 1;
+	int len = sizeof(int);
+	setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &flag, len);
+	int n = bind(fd, (struct sockaddr*)&addr, sizeof(addr) );
 
-    struct epoll_event ev;
-    memset(&ev, 0, sizeof ev);
-    //ev.events = EPOLLIN | EPOLLOUT | EPOLLET;
-    ev.events = EPOLLIN | EPOLLOUT;
-    ev.data.fd = fd;
+	if(n != 0)
+	{
+		printf("bind fail, fd=%d;pszAddr=%s;unPort=%d\n", fd, pszAddr, unPort);
+		printf("desc=%s,file=%s,line=%d,errno=%d,err=%s\n", "Failed to bind", __FILE__, __LINE__, errno, strerror(errno));
+		return -1;
+	}
 
-    if(epoll_ctl(m_epfd, EPOLL_CTL_ADD, fd, &ev) == -1)
-    {
-        ERROR_RETURN2("Failed to epoll_ctl_add listen fd");
-    }
+	n = listen(fd, 20);
+	if(n != 0)
+	{
+		printf("desc=%s,file=%s,line=%d,errno=%d,err=%s\n", "Failed to listen", __FILE__, __LINE__, errno, strerror(errno));
+		return -1;
+	}
 
-    AddFdAndMb(fd, FD_TYPE_SERVER, pszAddr, unPort);
+	m_epfd = epoll_create(MAX_EPOLL_SIZE);
+	if(m_epfd == -1)
+	{
+		printf("desc=%s,file=%s,line=%d,errno=%d,err=%s\n", "Failed to epoll_create", __FILE__, __LINE__, errno, strerror(errno));
+		return -1;
+	}
 
-    LogDebug("start_server", "%s:%d,success.", m_strAddr.c_str(), m_unPort);
-    return 0;
+	struct epoll_event ev;
+	memset(&ev, 0, sizeof ev);
+	//ev.events = EPOLLIN | EPOLLOUT | EPOLLET;
+	ev.events = EPOLLIN | EPOLLOUT;
+	ev.data.fd = fd;
+
+	if(epoll_ctl(m_epfd, EPOLL_CTL_ADD, fd, &ev) == -1)
+	{
+		printf("desc=%s,file=%s,line=%d,errno=%d,err=%s\n", "Failed to epoll_ctl_add listen fd", __FILE__, __LINE__, errno, strerror(errno));
+		return -1;
+	}
+
+//	AddFdAndMb(fd, FD_TYPE_SERVER, pszAddr, unPort);
+
+//	LogDebug("start_server", "%s:%d,success.", m_strAddr.c_str(), m_unPort);
+	return 0;
 }
 
-int CEpollServer::ConnectMailboxs(const char* pszCfgFile)
-{
-    list<CMailBox*>& mbs = GetWorld()->GetMbMgr().GetMailboxs();
-
-    //todo,这里还要修改一下
-    //m_serverMbs.reserve(mbs.size());
-    m_serverMbs.reserve(SERVER_MAILBOX_RESERVE_SIZE);
-    for(int i=0; i<SERVER_MAILBOX_RESERVE_SIZE; ++i)
-    {
-        m_serverMbs.push_back(NULL);
-    }
-
-    //printf("mbs.size()=%d\n", mbs.size());
-
-    list<CMailBox*>::iterator iter = mbs.begin();
-    for(; iter != mbs.end(); )
-    {
-        CMailBox* pmb = *iter;
-        if(m_unMailboxId == pmb->GetMailboxId())
-        {
-			delete pmb;
-			*iter = NULL;
-			iter = mbs.erase(iter);
-            continue;
-        }
-
-        m_serverMbs[pmb->GetMailboxId()] = pmb;
-        //printf("111_get_server_mailbox:%x\n", get_server_mailbox(pmb->get_mailbox_id()));
-
-        int nRet = pmb->ConnectServer(m_epfd);
-        if(nRet != 0)
-        {
-            return nRet;
-        }
-
-        AddFdAndMb(pmb->GetFd(), pmb);
-
-        LogDebug("try_to_connect_mailbox", "server=%s;port=%d",
-                 pmb->GetServerName().c_str(), pmb->GetServerPort());
-		++iter;
-    }
-	
-    //printf("get_server_mailbox:%x\n", get_server_mailbox(3));
-
-    return 0;
-}
+//int CEpollServer::ConnectMailboxs(const char* pszCfgFile)
+//{
+//    list<CMailBox*>& mbs = GetWorld()->GetMbMgr().GetMailboxs();
+//
+//    //todo,这里还要修改一下
+//    //m_serverMbs.reserve(mbs.size());
+//    m_serverMbs.reserve(SERVER_MAILBOX_RESERVE_SIZE);
+//    for(int i=0; i<SERVER_MAILBOX_RESERVE_SIZE; ++i)
+//    {
+//        m_serverMbs.push_back(NULL);
+//    }
+//
+//    //printf("mbs.size()=%d\n", mbs.size());
+//
+//    list<CMailBox*>::iterator iter = mbs.begin();
+//    for(; iter != mbs.end(); )
+//    {
+//        CMailBox* pmb = *iter;
+//        if(m_unMailboxId == pmb->GetMailboxId())
+//        {
+//			delete pmb;
+//			*iter = NULL;
+//			iter = mbs.erase(iter);
+//            continue;
+//        }
+//
+//        m_serverMbs[pmb->GetMailboxId()] = pmb;
+//        //printf("111_get_server_mailbox:%x\n", get_server_mailbox(pmb->get_mailbox_id()));
+//
+//        int nRet = pmb->ConnectServer(m_epfd);
+//        if(nRet != 0)
+//        {
+//            return nRet;
+//        }
+//
+//        AddFdAndMb(pmb->GetFd(), pmb);
+//
+//        LogDebug("try_to_connect_mailbox", "server=%s;port=%d",
+//                 pmb->GetServerName().c_str(), pmb->GetServerPort());
+//		++iter;
+//    }
+//
+//    //printf("get_server_mailbox:%x\n", get_server_mailbox(3));
+//
+//    return 0;
+//}
 
 int CEpollServer::Service(const char* pszAddr, unsigned int unPort)
 {
@@ -144,16 +163,13 @@ int CEpollServer::Service(const char* pszAddr, unsigned int unPort)
     }
 
     //call lua
-    GetWorld()->OnServerReady();
+//    GetWorld()->OnServerReady();
 
     struct epoll_event ev;
     struct epoll_event events[MAX_EPOLL_SIZE];
 
     enum { _EPOLL_TIMEOUT = 50, };
 
-#ifdef _MYPROF
-    CGetTimeOfDay time_prof;
-#endif
 
     while (!m_bShutdown)
     {

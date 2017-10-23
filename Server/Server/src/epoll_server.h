@@ -6,9 +6,7 @@
 #include <time.h>
 
 #include "util.h"
-#include "net_util.h"
-#include "mailbox.h"
-#include "pluto.h"
+
 
 
 enum
@@ -40,28 +38,25 @@ class CEpollServer
         int Service(const char* pszAddr, unsigned int unPort);
 
     protected:
-        void AddFdAndMb(int fd, CMailBox* pmb);
-        void AddFdAndMb(int fd, EFDTYPE efd, const char* pszAddr, uint16_t unPort);
+//        void AddFdAndMb(int fd, CMailBox* pmb);
+//        void AddFdAndMb(int fd, EFDTYPE efd, const char* pszAddr, uint16_t unPort);
         void RemoveFd(int fd);
-        EFDTYPE GetFdType(int fd);
-        CMailBox* GetFdMailbox(int fd);
+//        EFDTYPE GetFdType(int fd);
+//        CMailBox* GetFdMailbox(int fd);
 
     protected:
         virtual int HandleNewConnection(int fd);
-        virtual int HandleMailboxEvent(int fd, uint32_t event, CMailBox* mb);
-        virtual int HandleFdEvent(int fd, uint32_t event, CMailBox* mb);
-        virtual int HandleMessage(int fd, CMailBox* mb);
+//        virtual int HandleMailboxEvent(int fd, uint32_t event, CMailBox* mb);
+//        virtual int HandleFdEvent(int fd, uint32_t event, CMailBox* mb);
+//        virtual int HandleMessage(int fd, CMailBox* mb);
         virtual int HandleTimeout();
         virtual int HandleMailboxReconnect();
 
-#ifdef __RELOGIN
-        virtual int HandleNeedToDisconnect();
-#endif
 
     protected:
         virtual int OnNewFdAccepted(int new_fd, sockaddr_in& addr);
         virtual int OnFdClosed(int fd);
-        virtual void AddRecvMsg(CPluto* u);
+//        virtual void AddRecvMsg(CPluto* u);
 
     public:
         //服务器主动关闭一个socket
@@ -76,15 +71,15 @@ class CEpollServer
         int HandleLeftPluto();
         //停止了服务器之后,进程退出之前的一个回调方法
         virtual void OnShutdownServer();
-        virtual int CheckPlutoHeadSize(int fd, CMailBox* mb, uint32_t nMsgLen);
+//        virtual int CheckPlutoHeadSize(int fd, CMailBox* mb, uint32_t nMsgLen);
 
         //
         //public:
         //    void AddSendPluto(CPluto* u);
 
     public:
-        void SetWorld(world* w);
-        world* GetWorld();
+//        void SetWorld(world* w);
+//        world* GetWorld();
 
     public:
         inline void SetMailboxId(uint16_t mid)
@@ -97,37 +92,6 @@ class CEpollServer
             return m_unMailboxId;
         }
 
-        CMailBox* GetServerMailbox(uint16_t nServerId)
-        {
-            //printf("get_server_mailbox:%d_%d\n", nServerId, m_serverMbs.size());
-            if(nServerId < m_serverMbs.size())
-            {
-                return m_serverMbs[nServerId];
-            }
-            else
-            {
-                return NULL;
-            }
-        }
-
-        CMailBox* GetClientMailbox(int32_t fd);
-
-        inline vector<CMailBox*>& GetAllServerMbs()
-        {
-            return m_serverMbs;
-        }
-
-        inline void AddLocalRpcPluto(CPluto* u)
-        {
-            m_recvMsgs.push_back(u);
-        }
-
-#ifdef __RELOGIN
-        inline void AddToNeedToDisconnectFd(int fd)
-        {
-            needToDisconnectFd.push_back(fd);
-        }
-#endif
 
     protected:
         int m_epfd;

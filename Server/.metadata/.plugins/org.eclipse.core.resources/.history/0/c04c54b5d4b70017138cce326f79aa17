@@ -1,0 +1,90 @@
+#ifndef __EPOLL_SERVER_HEAD__
+#define __EPOLL_SERVER_HEAD__
+
+
+#include <sys/epoll.h>
+#include <time.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <string.h>
+
+#include "util.h"
+
+
+
+enum
+{
+    MAX_EPOLL_SIZE = 9999,
+    MAXBUF = 1024,
+    CLIENT_TIMEOUT = 20,
+    OTHERSERVER_TIMEOUT = 5,
+};
+
+namespace mogo
+{
+    class world;
+}
+
+
+class CEpollServer
+{
+	public:
+		CEpollServer();
+		virtual ~CEpollServer();
+
+	public:
+		int StartServer(const char* pszAddr, uint16_t unPort);
+		int ConnectMailboxs(const char* pszCfgFile);
+		void Shutdown();
+
+	public:
+		int Service(const char* pszAddr, unsigned int unPort);
+
+	protected:
+		void RemoveFd(int fd);
+
+	protected:
+		virtual int HandleNewConnection(int fd);
+		virtual int HandleTimeout();
+		virtual int HandleMailboxReconnect();
+
+	#ifdef __RELOGIN
+		virtual int HandleNeedToDisconnect();
+	#endif
+
+	protected:
+		virtual int OnNewFdAccepted(int new_fd, sockaddr_in& addr);
+		virtual int OnFdClosed(int fd);
+
+	public:
+		//服务器主动关闭一个socket
+		void CloseFdFromServer(int fd);
+		//顶掉一个连接
+		void KickOffFd(int fd);
+
+	protected:
+		virtual int HandlePluto();
+		virtual int HandleSendPluto();
+		//把剩余的pluto包发送完毕
+		int HandleLeftPluto();
+		//停止了服务器之后,进程退出之前的一个回调方法
+		virtual void OnShutdownServer();
+
+	protected:
+
+		int m_epfd;
+		string m_strAddr;
+		uint16_t m_unPort;
+
+		bool m_bShutdown;
+		uint32_t m_unMaxPlutoCount;
+
+};
+
+
