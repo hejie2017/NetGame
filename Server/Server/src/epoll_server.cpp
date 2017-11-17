@@ -12,7 +12,7 @@
 
 
 
-CEpollServer::CEpollServer()
+CEpollServer::CEpollServer():m_epfd(0),m_bShutdown(false)
 {
 
 }
@@ -70,9 +70,7 @@ int CEpollServer::StartServer(const char* pszAddr, uint16_t unPort)
         ERROR_RETURN2("Failed to epoll_ctl_add listen fd");
     }
 
-    AddFdAndMb(fd, FD_TYPE_SERVER, pszAddr, unPort);
 
-    LogDebug("start_server", "%s:%d,success.", m_strAddr.c_str(), m_unPort);
     return 0;
 }
 
@@ -98,7 +96,8 @@ int CEpollServer::Service(const char* pszAddr, unsigned int unPort)
     {
         //GetWorld()->DoConsoleLua();
 
-        int event_count = m_fds.size();
+//        int event_count = m_fds.size();
+    	int event_count = 10;
         int nfds = epoll_wait(m_epfd, events, event_count, _EPOLL_TIMEOUT);
         if (nfds == -1)
         {
@@ -115,7 +114,7 @@ int CEpollServer::Service(const char* pszAddr, unsigned int unPort)
         else if(nfds == 0)
         {
             //timeout
-            this->HandleTimeout();
+//            this->HandleTimeout();
         }
 
 
@@ -201,12 +200,12 @@ int CEpollServer::HandleNewConnection(int fd)
 
     enum{ MAX_ACCEPT = 1024-20, };  //一般linux设置每个进程打开文件数为1024,这个设置正好符合游戏的最大连接数
     //enum{ MAX_ACCEPT = 4000, };
-    if(m_fds.size() >= MAX_ACCEPT)
-    {
-        ::close(new_fd);
-//        LogWarning("max_connection", "closed=%d", new_fd);
-        return -3;
-    }
+//    if(m_fds.size() >= MAX_ACCEPT)
+//    {
+//        ::close(new_fd);
+////        LogWarning("max_connection", "closed=%d", new_fd);
+//        return -3;
+//    }
 
     char* pszClientAddr = inet_ntoa(their_addr.sin_addr);
     uint16_t unClientPort = ntohs(their_addr.sin_port);
@@ -222,7 +221,7 @@ int CEpollServer::HandleNewConnection(int fd)
         ERROR_PRINT2("Failed to epoll_ctl_add new accepted socket");
         return -3;
     }
-    this->OnNewFdAccepted(new_fd, their_addr);
+//    this->OnNewFdAccepted(new_fd, their_addr);
 
     return 0;
 }
@@ -231,17 +230,17 @@ int CEpollServer::HandleNewConnection(int fd)
 //服务器主动关闭一个socket
 void CEpollServer::CloseFdFromServer(int fd)
 {
-    this->OnFdClosed(fd);    
+//    this->OnFdClosed(fd);
     epoll_ctl(m_epfd, EPOLL_CTL_DEL, fd, NULL);
 	::close(fd);
-    RemoveFd(fd);
+//    RemoveFd(fd);
 }
 
 //顶掉一个连接
 void CEpollServer::KickOffFd(int fd)
 {
     epoll_ctl(m_epfd, EPOLL_CTL_DEL, fd, NULL);
-    RemoveFd(fd);
+//    RemoveFd(fd);
     ::close(fd);
 }
 
