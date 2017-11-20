@@ -1,191 +1,153 @@
 /*----------------------------------------------------------------
-// Copyright (C) 2013 广州，爱游
-//
-// 模块名：epoll_server
-// 创建者：Steven Yang
-// 修改者列表：
-// 创建日期：2013.1.5
-// 模块描述：epoll 相关。
-//----------------------------------------------------------------*/
+ // Copyright (C) 2013 广州，爱游
+ //
+ // 模块名：epoll_server
+ // 创建者：Steven Yang
+ // 修改者列表：
+ // 创建日期：2013.1.5
+ // 模块描述：epoll 相关。
+ //----------------------------------------------------------------*/
 
 #include "epoll_server.h"
 
-
-
-CEpollServer::CEpollServer():m_epfd(0),m_bShutdown(false)
-{
+CEpollServer::CEpollServer() :
+		m_epfd(0), m_bShutdown(false),m_fds() {
 
 }
 
-
-CEpollServer::~CEpollServer()
-{
+CEpollServer::~CEpollServer() {
 
 }
 
-int CEpollServer::StartServer(const char* pszAddr, uint16_t unPort)
-{
-    m_strAddr.assign(pszAddr);
-    m_unPort = unPort;
+int CEpollServer::StartServer(const char* pszAddr, uint16_t unPort) {
+	m_strAddr.assign(pszAddr);
+	m_unPort = unPort;
 
-    int fd = MogoSocket();
-    if(fd == -1)
-    {
-        ERROR_RETURN2("Failed to create socket");
-    }
+	int fd = MogoSocket();
+	if (fd == -1) {
+		ERROR_RETURN2("Failed to create socket");
+	}
 
-    MogoSetNonblocking(fd);
+	MogoSetNonblocking(fd);
 
 	//修改rcvbuf和sndbuf
-	enum{ _BUFF_SIZE = 174760 };
+	enum {
+		_BUFF_SIZE = 174760
+	};
 	MogoSetBuffSize(fd, _BUFF_SIZE, _BUFF_SIZE);
 
-    int n = MogoBind(fd, pszAddr, unPort);
-    if(n != 0)
-    {
-        printf("bind fail, fd=%d;pszAddr=%s;unPort=%d\n", fd, pszAddr, unPort);
-        ERROR_RETURN2("Failed to bind");
-    }
+	int n = MogoBind(fd, pszAddr, unPort);
+	if (n != 0) {
+		printf("bind fail, fd=%d;pszAddr=%s;unPort=%d\n", fd, pszAddr, unPort);
+		ERROR_RETURN2("Failed to bind");
+	}
 
-    n = MogoListen(fd, 20);
-    if(n != 0)
-    {
-        ERROR_RETURN2("Failed to listen");
-    }
+	n = MogoListen(fd, 20);
+	if (n != 0) {
+		ERROR_RETURN2("Failed to listen");
+	}
 
-    m_epfd = epoll_create(MAX_EPOLL_SIZE);
-    if(m_epfd == -1)
-    {
-        ERROR_RETURN2("Failed to epoll_create");
-    }
+	m_epfd = epoll_create(MAX_EPOLL_SIZE);
+	if (m_epfd == -1) {
+		ERROR_RETURN2("Failed to epoll_create");
+	}
 
-    struct epoll_event ev;
-    memset(&ev, 0, sizeof ev);
-    //ev.events = EPOLLIN | EPOLLOUT | EPOLLET;
-    ev.events = EPOLLIN | EPOLLOUT;
-    ev.data.fd = fd;
+	struct epoll_event ev;
+	memset(&ev, 0, sizeof ev);
+	//ev.events = EPOLLIN | EPOLLOUT | EPOLLET;
+	ev.events = EPOLLIN | EPOLLOUT;
+	ev.data.fd = fd;
 
-    if(epoll_ctl(m_epfd, EPOLL_CTL_ADD, fd, &ev) == -1)
-    {
-        ERROR_RETURN2("Failed to epoll_ctl_add listen fd");
-    }
+	if (epoll_ctl(m_epfd, EPOLL_CTL_ADD, fd, &ev) == -1) {
+		ERROR_RETURN2("Failed to epoll_ctl_add listen fd");
+	}
 
-
-    return 0;
+	return 0;
 }
 
-int CEpollServer::Service(const char* pszAddr, unsigned int unPort)
-{
-    int nRet = StartServer(pszAddr, unPort);
-    if(nRet != 0)
-    {
-        return nRet;
-    }
+int CEpollServer::Service(const char* pszAddr, unsigned int unPort) {
+	int nRet = StartServer(pszAddr, unPort);
+	if (nRet != 0) {
+		return nRet;
+	}
 
-    if(nRet != 0)
-    {
-        return nRet;
-    }
+	struct epoll_event ev;
+	struct epoll_event events[MAX_EPOLL_SIZE];
 
-    struct epoll_event ev;
-    struct epoll_event events[MAX_EPOLL_SIZE];
+	enum {
+		_EPOLL_TIMEOUT = 50,
+	};
 
-    enum { _EPOLL_TIMEOUT = 50, };
-
-    while (!m_bShutdown)
-    {
-        //GetWorld()->DoConsoleLua();
+	while (!m_bShutdown) {
+		//GetWorld()->DoConsoleLua();
 
 //        int event_count = m_fds.size();
-    	int event_count = 10;
-        int nfds = epoll_wait(m_epfd, events, event_count, _EPOLL_TIMEOUT);
-        if (nfds == -1)
-        {
-            if (errno == EINTR)//modify-kevin-20130226
-            {
-                continue;
-            }
-            else
-            {
-                ERROR_RETURN2("Failed to epoll_wait");
-                break;
-            }
-        }
-        else if(nfds == 0)
-        {
-            //timeout
+		int event_count = 10;
+		int nfds = epoll_wait(m_epfd, events, event_count, _EPOLL_TIMEOUT);
+		if (nfds == -1) {
+			if (errno == EINTR) //modify-kevin-20130226
+			{
+				continue;
+			} else {
+				ERROR_RETURN2("Failed to epoll_wait");
+				break;
+			}
+		} else if (nfds == 0) {
+			//timeout
 //            this->HandleTimeout();
-        }
+		}
+
+		for (int n = 0; n < nfds; ++n) {
+			int fd = events[n].data.fd;
+            CMailBox* mb = GetFdMailbox(fd);
+            if(mb == NULL){
+					continue;
+				}
+            EFDTYPE tfd = mb->GetFdType();
 
 
-        for (int n = 0; n < nfds; ++n)
-        {
-            int fd = events[n].data.fd;
-//            CMailBox* mb = GetFdMailbox(fd);
-//            if(mb == NULL)
-//            {
-//                //todo
-//                continue;
-//            }
-//            EFDTYPE tfd = mb->GetFdType();
-//
-//            //printf("nfds=%d,fd=%d\n", nfds, fd);
-//
-//            switch(tfd)
-//            {
-//                case FD_TYPE_SERVER:
-//                {
-//                    int _nRet = HandleNewConnection(fd);
-//                    if(_nRet == 0)
-//                    {
-//                        ++event_count;
-//                    }
-//                    break;
-//                }
-//                case FD_TYPE_ACCEPT:
-//                {
-//                    if(this->HandleFdEvent(fd, events[n].events, mb) != 0)
-//                    {
-//                        //--event_count;
-//                    }
-//                    break;
-//                }
-//                case FD_TYPE_MAILBOX:
-//                {
-//                    if(this->HandleMailboxEvent(fd, events[n].events, mb) != 0)
-//                    {
-//                        //--event_count;
-//                    }
-//                    break;
-//                }
-//                default:
-//                {
-//                    //FD_TYPE_ERROR
-//                    break;
-//                }
-//            }
+            switch(tfd)
+				{
+					case FD_TYPE_ACCEPT:
+					{
+						int _nRet = HandleNewConnection(fd);
 
-        }
+						break;
+					}
+					case FD_TYPE_CLIENT:
+					{
+//						if(this->HandleFdEvent(fd, events[n].events, mb) != 0)
+//						{
+//							//--event_count;
+//						}
+						break;
+					}
 
-    }
+					default:
+					{
+						//FD_TYPE_ERROR
+						break;
+					}
+				}
 
-    OnShutdownServer();
+		}
 
-    return 0;
+	}
+
+	OnShutdownServer();
+
+	return 0;
 }
 
-void CEpollServer::OnShutdownServer()
-{
-    sleep(2);
+void CEpollServer::OnShutdownServer() {
+	sleep(2);
 }
 
-int CEpollServer::HandleNewConnection(int fd)
-{
-    struct sockaddr_in their_addr;
-    socklen_t their_len = sizeof(their_addr);
-    int new_fd = accept(fd, (struct sockaddr *) &their_addr, &their_len);
-    if (new_fd < 0)
-    {
+int CEpollServer::HandleNewConnection(int fd) {
+	struct sockaddr_in their_addr;
+	socklen_t their_len = sizeof(their_addr);
+	int new_fd = accept(fd, (struct sockaddr *) &their_addr, &their_len);
+	if (new_fd < 0) {
 //        if(errno == EAGAIN)
 //        {
 //            ERROR_PRINT2("Failed to accept new connection,try EAGAIN\n")
@@ -196,10 +158,13 @@ int CEpollServer::HandleNewConnection(int fd)
 //            ERROR_PRINT2("Failed to accept new connection")
 //            return -2;
 //        }
-    }
+	}
 
-    enum{ MAX_ACCEPT = 1024-20, };  //一般linux设置每个进程打开文件数为1024,这个设置正好符合游戏的最大连接数
-    //enum{ MAX_ACCEPT = 4000, };
+	enum {
+		MAX_ACCEPT = 1024 - 20,
+	};
+	//一般linux设置每个进程打开文件数为1024,这个设置正好符合游戏的最大连接数
+	//enum{ MAX_ACCEPT = 4000, };
 //    if(m_fds.size() >= MAX_ACCEPT)
 //    {
 //        ::close(new_fd);
@@ -207,41 +172,50 @@ int CEpollServer::HandleNewConnection(int fd)
 //        return -3;
 //    }
 
-    char* pszClientAddr = inet_ntoa(their_addr.sin_addr);
-    uint16_t unClientPort = ntohs(their_addr.sin_port);
+	char* pszClientAddr = inet_ntoa(their_addr.sin_addr);
+	uint16_t unClientPort = ntohs(their_addr.sin_port);
 
-    MogoSetNonblocking(new_fd);
-    struct epoll_event ev;
-    memset(&ev, 0, sizeof ev);
+	MogoSetNonblocking(new_fd);
+	struct epoll_event ev;
+	memset(&ev, 0, sizeof ev);
 
-    ev.events = EPOLLIN | EPOLLET;
-    ev.data.fd = new_fd;
-    if (epoll_ctl(m_epfd, EPOLL_CTL_ADD, new_fd, &ev) < 0)
-    {
-        ERROR_PRINT2("Failed to epoll_ctl_add new accepted socket");
-        return -3;
-    }
+	ev.events = EPOLLIN | EPOLLET;
+	ev.data.fd = new_fd;
+	if (epoll_ctl(m_epfd, EPOLL_CTL_ADD, new_fd, &ev) < 0) {
+		ERROR_PRINT2("Failed to epoll_ctl_add new accepted socket");
+		return -3;
+	}
 //    this->OnNewFdAccepted(new_fd, their_addr);
 
-    return 0;
+	return 0;
 }
 
-
 //服务器主动关闭一个socket
-void CEpollServer::CloseFdFromServer(int fd)
-{
+void CEpollServer::CloseFdFromServer(int fd) {
 //    this->OnFdClosed(fd);
-    epoll_ctl(m_epfd, EPOLL_CTL_DEL, fd, NULL);
+	epoll_ctl(m_epfd, EPOLL_CTL_DEL, fd, NULL);
 	::close(fd);
 //    RemoveFd(fd);
 }
 
 //顶掉一个连接
-void CEpollServer::KickOffFd(int fd)
-{
-    epoll_ctl(m_epfd, EPOLL_CTL_DEL, fd, NULL);
+void CEpollServer::KickOffFd(int fd) {
+	epoll_ctl(m_epfd, EPOLL_CTL_DEL, fd, NULL);
 //    RemoveFd(fd);
-    ::close(fd);
+	::close(fd);
+}
+
+CMailBox* CEpollServer::GetFdMailbox(int fd)
+{
+    map<int, CMailBox*>::const_iterator iter = m_fds.find(fd);
+    if(iter == m_fds.end())
+    {
+        return NULL;
+    }
+    else
+    {
+        return iter->second;
+    }
 }
 
 //

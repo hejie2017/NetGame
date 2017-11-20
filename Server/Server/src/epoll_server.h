@@ -5,6 +5,8 @@
 #include <sys/epoll.h>
 #include "net_util.h"
 #include <string>
+#include <map>
+#include "mailbox.h"
 
 using namespace std;
 using namespace mogo;
@@ -38,19 +40,15 @@ class CEpollServer
     public:
         void OnShutdownServer();
         int HandleNewConnection(int fd);
-        void CloseFdFromServer(int fd);
-        void KickOffFd(int fd);
-    protected:
-        virtual int HandlePluto();
-        virtual int HandleSendPluto();
 
+        CMailBox* GetFdMailbox(int fd);
     protected:
         string m_strAddr;
         uint16_t m_unPort;
 
         bool m_bShutdown;
         int m_epfd;
-
+        map<int, CMailBox*> m_fds;
 };
 
 
