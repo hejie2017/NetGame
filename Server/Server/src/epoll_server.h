@@ -40,8 +40,10 @@ class CEpollServer
     public:
         void OnShutdownServer();
         int HandleNewConnection(int fd);
-
+        int OnNewFdAccepted(int new_fd, sockaddr_in& addr);
         CMailBox* GetFdMailbox(int fd);
+        void AddFdAndMb(int fd, CMailBox* pmb);
+        void AddFdAndMb(int fd, EFDTYPE efd, const char* pszAddr, uint16_t unPort);
     protected:
         string m_strAddr;
         uint16_t m_unPort;

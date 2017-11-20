@@ -1,3 +1,5 @@
+#include <string>
+using namespace std;
 
 enum EFDTYPE{
 	FD_TYPE_ACCEPT,
@@ -6,14 +8,50 @@ enum EFDTYPE{
 
 class CMailBox{
 public:
-	CMailBox(EFDTYPE fdtype);
+	CMailBox(short  uid, EFDTYPE fdtype, const char* pszAddr, short  unPort);
 	~CMailBox();
 
-	EFDTYPE GetFdType()
+	inline bool IsConnected() const
 	{
-		return m_fdtype;
+		return m_bConnected;
+	}
+
+	inline void SetConnected(bool c = true)
+	{
+		m_bConnected = c;
+	}
+
+	inline void SetFd(int fd)
+	{
+		m_fd = fd;
+	}
+
+	inline int GetFd() const
+	{
+		return m_fd;
+	}
+
+	inline EFDTYPE GetFdType() const
+	{
+		return m_fdType;
+	}
+
+	inline const string& GetServerName() const
+	{
+		return m_serverName;
+	}
+
+	inline short GetServerPort() const
+	{
+		return m_serverPort;
 	}
 
 private:
-	EFDTYPE m_fdtype;
+	short m_id;
+	bool m_bConnected;
+
+	int m_fd;
+	EFDTYPE m_fdType;
+	string m_serverName;
+	short m_serverPort;
 };

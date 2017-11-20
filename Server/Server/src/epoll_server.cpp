@@ -185,10 +185,69 @@ int CEpollServer::HandleNewConnection(int fd) {
 		ERROR_PRINT2("Failed to epoll_ctl_add new accepted socket");
 		return -3;
 	}
-//    this->OnNewFdAccepted(new_fd, their_addr);
+    this->OnNewFdAccepted(new_fd, their_addr);
 
 	return 0;
 }
+
+int CEpollServer::OnNewFdAccepted(int new_fd, sockaddr_in& addr)
+{
+    char* pszClientAddr = inet_ntoa(addr.sin_addr);
+    uint16_t unClientPort = ntohs(addr.sin_port);
+
+    AddFdAndMb(new_fd, FD_TYPE_ACCEPT, pszClientAddr, unClientPort);
+    //printf("on_new_fd_accepted\n");
+    return 0;
+}
+
+void CEpollServer::AddFdAndMb(int fd, CMailBox* pmb)
+{
+    pmb->SetFd(fd);
+
+    map<int, CMailBox*>::iterator iter = m_fds.lower_bound(fd);
+    if(iter != m_fds.end() && iter->first == fd)
+    {
+        //异常情况,有一个老的mb未删除
+        CMailBox* p2 = iter->second;
+        if (p2 != pmb)
+        {
+            delete p2;
+            iter->second = pmb;
+        }
+
+        //iter->second = pmb;
+        //delete p2;
+
+    }
+    else
+    {
+        //正常情况
+        m_fds.insert(iter, make_pair(fd, pmb));
+
+        ////初始化每个连接上面待处理的Pluto数量
+        //this->m_fd2Plutos.insert(make_pair(fd, 0));
+    }
+
+}
+
+//来自客户端的连接会直接调用这个方法
+void CEpollServer::AddFdAndMb(int fd, EFDTYPE efd, const char* pszAddr, uint16_t unPort)
+{
+    CMailBox* pmb = new CMailBox(0, efd, pszAddr, unPort);
+
+//    //来自可信任客户端地址的连接,免认证
+//    if(this->GetWorld()->IsTrustedClient(pmb->GetServerName()))
+//    {
+//        LogDebug("CEpollServer::AddFdAndMb", "client_trusted, serverName=%s", pmb->GetServerName().c_str());
+//        pmb->SetAuthz(MAILBOX_CLIENT_TRUSTED);
+//    }
+
+    //设置已连接标记
+    pmb->SetConnected();
+
+    AddFdAndMb(fd, pmb);
+}
+
 
 //服务器主动关闭一个socket
 void CEpollServer::CloseFdFromServer(int fd) {
