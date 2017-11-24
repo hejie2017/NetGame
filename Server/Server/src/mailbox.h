@@ -2,8 +2,8 @@
 using namespace std;
 
 enum EFDTYPE{
-	FD_TYPE_ACCEPT,
-	FD_TYPE_CLIENT
+	FD_TYPE_SERVER,
+	FD_TYPE_ACCEPT
 };
 
 class CMailBox{

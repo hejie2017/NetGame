@@ -44,6 +44,7 @@ class CEpollServer
         CMailBox* GetFdMailbox(int fd);
         void AddFdAndMb(int fd, CMailBox* pmb);
         void AddFdAndMb(int fd, EFDTYPE efd, const char* pszAddr, uint16_t unPort);
+        int HandleMessage(int fd, CMailBox* mb);
     protected:
         string m_strAddr;
         uint16_t m_unPort;

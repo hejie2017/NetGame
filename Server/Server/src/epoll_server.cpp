@@ -11,7 +11,8 @@
 #include "epoll_server.h"
 
 CEpollServer::CEpollServer() :
-		m_epfd(0), m_bShutdown(false),m_fds() {
+		m_epfd(0), m_bShutdown(false),m_fds()
+{
 
 }
 
@@ -62,6 +63,8 @@ int CEpollServer::StartServer(const char* pszAddr, uint16_t unPort) {
 		ERROR_RETURN2("Failed to epoll_ctl_add listen fd");
 	}
 
+	AddFdAndMb(fd, FD_TYPE_SERVER, pszAddr, unPort);
+
 	return 0;
 }
 
@@ -108,18 +111,19 @@ int CEpollServer::Service(const char* pszAddr, unsigned int unPort) {
 
             switch(tfd)
 				{
-					case FD_TYPE_ACCEPT:
+					case FD_TYPE_SERVER:
 					{
 						int _nRet = HandleNewConnection(fd);
 
 						break;
 					}
-					case FD_TYPE_CLIENT:
+					case FD_TYPE_ACCEPT:
 					{
-//						if(this->HandleFdEvent(fd, events[n].events, mb) != 0)
-//						{
-//							//--event_count;
-//						}
+
+						if(this->HandleMessage(fd, mb) != 0)
+						{
+							//--event_count;
+						}
 						break;
 					}
 
@@ -129,7 +133,6 @@ int CEpollServer::Service(const char* pszAddr, unsigned int unPort) {
 						break;
 					}
 				}
-
 		}
 
 	}
@@ -277,10 +280,13 @@ CMailBox* CEpollServer::GetFdMailbox(int fd)
     }
 }
 
-//
-////直接接收数据至pluto,不需要先接收到buff再copy
-//int CEpollServer::HandleMessage(int fd, CMailBox* mb)
-//{
+
+//直接接收数据至pluto,不需要先接收到buff再copy
+int CEpollServer::HandleMessage(int fd, CMailBox* mb)
+{
+	char szHead[100];
+	int nLen = ::recv(fd, szHead, 50, 0);
+	return -1;
 //    //errno = 0;
 //    int nLen = -1;
 //    CPluto* u = mb->GetRecvPluto();
@@ -300,9 +306,9 @@ CMailBox* CEpollServer::GetFdMailbox(int fd)
 //
 //                if (nMsgLen > 65536)
 //                {
-//                    LogWarning("CEpollServer::HandleMessage warning", "nMsgLen=%d;ServerName=%s;ServerType=%d",
-//                                                                       nMsgLen, mb->GetServerName().c_str(), mb->GetServerMbType());
-//                    PrintHex16(szHead, (size_t)nLen);
+////                    LogWarning("CEpollServer::HandleMessage warning", "nMsgLen=%d;ServerName=%s;ServerType=%d",
+////                                                                       nMsgLen, mb->GetServerName().c_str(), mb->GetServerMbType());
+////                    PrintHex16(szHead, (size_t)nLen);
 //                }
 //
 //                //PLUTO_HEAD_SIZE_CHECK(fd, mb, nMsgLen);
@@ -482,10 +488,10 @@ CMailBox* CEpollServer::GetFdMailbox(int fd)
 //        {
 //            return 0;
 //        }
-//        LogWarning("handle_message_err", "failed, %d,'%s'",errno, strerror(errno));
+////        LogWarning("handle_message_err", "failed, %d,'%s'",errno, strerror(errno));
 //    }
 //    //LogDebug("hdm_recv_err", "fd=%d;recv=%d;err=%d", fd, nLen, errno);
 //    close(fd);
 //    return -1;
-//}
-//#endif
+}
+
