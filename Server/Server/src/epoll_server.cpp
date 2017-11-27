@@ -119,7 +119,6 @@ int CEpollServer::Service(const char* pszAddr, unsigned int unPort) {
 					}
 					case FD_TYPE_ACCEPT:
 					{
-
 						if(this->HandleMessage(fd, mb) != 0)
 						{
 							//--event_count;
@@ -286,6 +285,7 @@ int CEpollServer::HandleMessage(int fd, CMailBox* mb)
 {
 	char szHead[100];
 	int nLen = ::recv(fd, szHead, 50, 0);
+	printf(szHead);
 	return -1;
 //    //errno = 0;
 //    int nLen = -1;
