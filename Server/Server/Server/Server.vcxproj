@@ -111,6 +111,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\epoll_server.cpp" />
+    <ClCompile Include="..\src\mailbox.cpp" />
+    <ClCompile Include="..\src\main.cpp" />
+    <ClCompile Include="..\src\net_util.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\epoll_server.h" />
+    <ClInclude Include="..\src\mailbox.h" />
+    <ClInclude Include="..\src\net_util.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\src\Makefile" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
