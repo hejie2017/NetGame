@@ -15,7 +15,9 @@ namespace mogo
 
     bool MogoSetNonblocking(int sockfd)
     {
+#ifdef linux
         return fcntl(sockfd, F_SETFL, fcntl(sockfd, F_GETFD, 0)|O_NONBLOCK) != -1;
+#endif
     }
 
     int MogoSocket()
@@ -69,15 +71,18 @@ namespace mogo
 
 	void MogoGetBuffSize(int fd)
 	{
+#ifdef linux
 		int n1 = 0,n2 = 0;
 		socklen_t nn1 = sizeof(n1),nn2=sizeof(n2);
 		getsockopt(fd, SOL_SOCKET, SO_RCVBUF, (int*)&n1, &nn1);
 		getsockopt(fd, SOL_SOCKET, SO_SNDBUF, (int*)&n2, &nn2);
 		//printf("222fd=%d;rcv=%d;snd=%d\n", fd, n1, n2);
+#endif
 	}
 
     int MogoAsyncRead(int sockfd, void* buf, size_t bufsize, int nTimeout)
     {
+#ifdef linux
         fd_set rfds;       
         FD_ZERO(&rfds);
         FD_SET(sockfd, &rfds);
@@ -94,5 +99,5 @@ namespace mogo
         
         return ret;
     }
-
+#endif
 };

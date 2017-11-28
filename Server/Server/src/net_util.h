@@ -1,15 +1,24 @@
 #ifndef __NET_UTIL__HEAD__
 #define __NET_UTIL__HEAD__
 
-#include <stdio.h>
+#ifdef linux
 #include <unistd.h>
-#include <errno.h>
-#include <fcntl.h>
-#include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <unistd.h>
+
+#else
+#include <winsock2.h> 
+#endif // LINUX
+
+#include <errno.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <stdio.h>
 #include <string.h>
+
+
 
 namespace mogo
 {

@@ -1,181 +1,125 @@
-#include <winsock2.h>   
-#include <stdio.h>   
-
-#define PORT  8888   
-
-#define MSGSIZE  1024   
-
-#pragma comment(lib, "ws2_32.lib")   
-
-int g_iTotalConn1 = 0;
-int g_iTotalConn2 = 0;
-
-SOCKET g_CliSocketArr1[FD_SETSIZE];
-SOCKET g_CliSocketArr2[FD_SETSIZE];
-
-DWORD WINAPI WorkerThread1(LPVOID lpParam);
-int CALLBACK ConditionFunc1(LPWSABUF lpCallerId, LPWSABUF lpCallerData, LPQOS lpSQOS, LPQOS lpGQOS, LPWSABUF lpCalleeId, LPWSABUF lpCalleeData, GROUP FAR * g, DWORD dwCallbackData);
-
-DWORD WINAPI WorkerThread2(LPVOID lpParam);
-int CALLBACK ConditionFunc2(LPWSABUF lpCallerId, LPWSABUF lpCallerData, LPQOS lpSQOS, LPQOS lpGQOS, LPWSABUF lpCalleeId, LPWSABUF lpCalleeData, GROUP FAR * g, DWORD dwCallbackData);
-
-
-int main(int argc, char* argv[])
+#include <winsock2.h> 
+#include <stdio.h> 
+#pragma comment(lib, "ws2_32.lib") 
+int main()
 {
-	WSADATA wsaData;
-	SOCKET sListen, sClient;
-	SOCKADDR_IN local, client;
-	int iAddrSize = sizeof(SOCKADDR_IN);
-	DWORD dwThreadId;
-	// Initialize windows socket library   
-	WSAStartup(0x0202, &wsaData);
-	// Create listening socket   
-	sListen = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-	// Bind   
-
-	local.sin_family = AF_INET;
-	local.sin_addr.S_un.S_addr = htonl(INADDR_ANY);
-	local.sin_port = htons(PORT);
-	bind(sListen, (sockaddr*)&local, sizeof(SOCKADDR_IN));
-
-	// Listen   
-
-	listen(sListen, 3);
-
-	// Create worker thread   
-
-	CreateThread(NULL, 0, WorkerThread1, NULL, 0, &dwThreadId);
-	// CreateThread(NULL, 0, WorkerThread2, NULL, 0, &dwThreadId);  
-
-	while (TRUE)
+	// 加载win socket 
+	WSADATA ws;
+	int ret;
+	ret = WSAStartup(MAKEWORD(2, 2), &ws);
+	if (ret != 0)
 	{
-		sClient = WSAAccept(sListen, (sockaddr*)&client, &iAddrSize, ConditionFunc1, 0);
-		printf("1:Accepted client:%s:%d:%d\n", inet_ntoa(client.sin_addr), ntohs(client.sin_port), g_iTotalConn1);
-		g_CliSocketArr1[g_iTotalConn1++] = sClient;
-		/*
-		sClient = WSAAccept(sListen, (sockaddr*)&client, &iAddrSize, ConditionFunc2, 0);
-		printf("2:Accepted client:%s:%d:%d\n", inet_ntoa(client.sin_addr), ntohs(client.sin_port), g_iTotalConn2);
-		g_CliSocketArr2[g_iTotalConn2++] = sClient;   */
-
+		printf("WSAStartup() 失败!\n");
+		return -1;
 	}
+	// 创建侦听SOCKET 
+	int sListen;
+	sListen = socket(AF_INET, SOCK_STREAM, 0);
+	if (sListen == INVALID_SOCKET)
+	{
+		printf("socket() 失败!\n");
+		return -1;
+	}
+	// 填充服务器地址结构 
+	sockaddr_in servAddr;
+	servAddr.sin_family = AF_INET;
+	servAddr.sin_addr.s_addr = INADDR_ANY;
+	servAddr.sin_port = htons(8888);
+
+	// 绑定服务器套接字 
+	ret = bind(sListen, (sockaddr*)&servAddr, sizeof(servAddr));
+	if (ret == SOCKET_ERROR)
+	{
+		printf("bind() 失败!\n");
+		return -1;
+	}
+
+	// 开始侦听 
+	ret = listen(sListen, 5);
+	if (ret == SOCKET_ERROR)
+	{
+		printf("listen() 失败!\n");
+		return -1;
+	}
+	printf("服务器启动成功，在端口%d监听…\n", ntohs(servAddr.sin_port));
+	//使用select模型 
+	// 创建套接字集合 
+	fd_set allSockSet; // 总的套接字集合 
+	fd_set readSet; // 可读套接字集合 
+	fd_set writeSet; // 可写套接字集合
+
+	FD_ZERO(&allSockSet); // 清空套接字集合 
+	FD_SET(sListen, &allSockSet); // 将sListen套接字加入套接字集合中 
+	char bufRecv[100]; // 接收缓冲区
+					   // 进入服务器主循环 
+	while (1)
+	{
+		FD_ZERO(&readSet); // 清空可读套接字 
+		FD_ZERO(&writeSet); // 清空可写套接字 
+		readSet = allSockSet; // 赋值 
+		writeSet = allSockSet; // 赋值 
+							   // 调用select函数，timeout设置为NULL 
+		ret = select(0, &readSet, 0, NULL, NULL);
+		//
+		if (ret == SOCKET_ERROR)
+		{
+			printf("select() 失败!\n");
+			return -1;
+		}
+		// 存在套接字的I/O已经准备好 
+		if (ret > 0)
+		{
+			// 遍历所有套接字 
+			for (int i = 0; i < allSockSet.fd_count; ++i)
+			{
+				int s = allSockSet.fd_array[i];
+				// 存在可读的套接字 
+				if (FD_ISSET(s, &readSet))
+				{
+					// 可读套接字为sListen 
+					if (s == sListen)
+					{
+						// 接收新的连接 
+						sockaddr_in clientAddr;
+						int len = sizeof(clientAddr);
+						int sClient = accept(s, (sockaddr*)&clientAddr, &len);
+						// 将新创建的套接字加入到集合中 
+						FD_SET(sClient, &allSockSet);
+						printf(">>>>>有新的连接到来啦…\n");
+						printf("目前客户端数目为：%d\n", allSockSet.fd_count - 1);
+					}
+					else // 接收客户端信息 
+					{
+						ret = recv(s, bufRecv, 100, 0);
+						// 接收错误 
+						if (ret == SOCKET_ERROR)
+						{
+							DWORD err = WSAGetLastError();
+							if (err == WSAECONNRESET)
+								printf("客户端被强行关闭\n");
+							else
+								printf("recv() 失败!");
+							// 删除套接字 
+							FD_CLR(s, &allSockSet);
+							printf("目前客户端数目为：%d\n", allSockSet.fd_count - 1);
+							break;
+						}
+						if (ret == 0)
+						{
+							printf("客户端已经退出!\n");
+							// 删除套接字 
+							FD_CLR(s, &allSockSet);
+							printf("目前客户端数目为：%d\n", allSockSet.fd_count - 1);
+							break;
+						}
+						bufRecv[ret] = '\0';
+						printf("收到的消息：%s\n", bufRecv);
+					} // end else
+
+				}// end if
+
+			}// end for 
+		} // end if 
+	}//end while 
 	return 0;
-}
-
-DWORD WINAPI WorkerThread1(LPVOID lpParam)
-{
-	int i;
-	fd_set fdread;
-	int ret;
-	struct timeval tv = { 1, 0 };
-	char szMessage[MSGSIZE];
-	while (TRUE)
-	{
-		FD_ZERO(&fdread);   //1清空队列
-		for (i = 0; i < g_iTotalConn1; i++)
-		{
-			FD_SET(g_CliSocketArr1[i], &fdread);   //2将要检查的套接口加入队列
-		}
-
-		// We only care read event   
-		ret = select(0, &fdread, NULL, NULL, &tv);   //3查询满足要求的套接字，不满足要求，出队
-		if (ret == 0)
-		{
-			// Time expired   
-			continue;
-		}
-
-		for (i = 0; i < g_iTotalConn1; i++)
-		{
-			if (FD_ISSET(g_CliSocketArr1[i], &fdread))    //4.是否依然在队列
-			{
-				// A read event happened on g_CliSocketArr   
-
-				ret = recv(g_CliSocketArr1[i], szMessage, MSGSIZE, 0);
-				if (ret == 0 || (ret == SOCKET_ERROR && WSAGetLastError() == WSAECONNRESET))
-				{
-					// Client socket closed   
-					printf("1:Client socket %d closed.\n", g_CliSocketArr1[i]);
-					closesocket(g_CliSocketArr1[i]);
-					if (i < g_iTotalConn1 - 1)
-					{
-						g_CliSocketArr1[i--] = g_CliSocketArr1[--g_iTotalConn1];
-					}
-				}
-				else
-				{
-					// We reveived a message from client   
-					szMessage[ret] = '\0';
-					printf(szMessage);
-					send(g_CliSocketArr1[i], szMessage, strlen(szMessage), 0);
-				}
-			}
-		}
-	}
-}
-
-int CALLBACK ConditionFunc1(LPWSABUF lpCallerId, LPWSABUF lpCallerData, LPQOS lpSQOS, LPQOS lpGQOS, LPWSABUF lpCalleeId, LPWSABUF lpCalleeData, GROUP FAR * g, DWORD dwCallbackData)
-{
-	if (g_iTotalConn1 < FD_SETSIZE)
-		return CF_ACCEPT;
-	else
-		return CF_REJECT;
-}
-
-DWORD WINAPI WorkerThread2(LPVOID lpParam)
-{
-	int i;
-	fd_set fdread;
-	int ret;
-	struct timeval tv = { 1, 0 };
-	char szMessage[MSGSIZE];
-	while (TRUE)
-	{
-		FD_ZERO(&fdread);   //1清空队列
-		for (i = 0; i < g_iTotalConn2; i++)
-		{
-			FD_SET(g_CliSocketArr2[i], &fdread);   //2将要检查的套接口加入队列
-		}
-
-		// We only care read event   
-		ret = select(0, &fdread, NULL, NULL, &tv);   //3查询满足要求的套接字，不满足要求，出队
-		if (ret == 0)
-		{
-			// Time expired   
-			continue;
-		}
-
-		for (i = 0; i < g_iTotalConn2; i++)
-		{
-			if (FD_ISSET(g_CliSocketArr2[i], &fdread))    //4.是否依然在队列
-			{
-				// A read event happened on g_CliSocketArr   
-
-				ret = recv(g_CliSocketArr2[i], szMessage, MSGSIZE, 0);
-				if (ret == 0 || (ret == SOCKET_ERROR && WSAGetLastError() == WSAECONNRESET))
-				{
-					// Client socket closed   
-					printf("2:Client socket %d closed.\n", g_CliSocketArr1[i]);
-					closesocket(g_CliSocketArr2[i]);
-					if (i < g_iTotalConn2 - 1)
-					{
-						g_CliSocketArr2[i--] = g_CliSocketArr2[--g_iTotalConn2];
-					}
-				}
-				else
-				{
-					// We reveived a message from client   
-					szMessage[ret] = '\0';
-					send(g_CliSocketArr2[i], szMessage, strlen(szMessage), 0);
-				}
-			}
-		}
-	}
-}
-
-int CALLBACK ConditionFunc2(LPWSABUF lpCallerId, LPWSABUF lpCallerData, LPQOS lpSQOS, LPQOS lpGQOS, LPWSABUF lpCalleeId, LPWSABUF lpCalleeData, GROUP FAR * g, DWORD dwCallbackData)
-{
-	if (g_iTotalConn2 < FD_SETSIZE)
-		return CF_ACCEPT;
-	else
-		return CF_REJECT;
 }
