@@ -1,7 +1,7 @@
 #ifndef __NET_UTIL__HEAD__
 #define __NET_UTIL__HEAD__
 
-#ifdef linux
+#ifdef  __linux__
 #include <unistd.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -10,7 +10,9 @@
 
 #else
 #include <winsock2.h> 
-#endif // LINUX
+#include <WS2tcpip.h>
+#pragma comment(lib, "Ws2_32.lib")
+#endif
 
 #include <errno.h>
 #include <fcntl.h>

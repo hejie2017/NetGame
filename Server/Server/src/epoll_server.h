@@ -1,8 +1,10 @@
 #ifndef __EPOLL_SERVER_HEAD__
 #define __EPOLL_SERVER_HEAD__
 
-
+#ifdef __linux__
 #include <sys/epoll.h>
+#else
+#endif
 #include "net_util.h"
 #include <string>
 #include <map>
@@ -51,9 +53,17 @@ class CEpollServer
 
         bool m_bShutdown;
         int m_epfd;
-        map<int, CMailBox*> m_fds;
-};
 
+        map<int, CMailBox*> m_fds;
+
+#ifdef WIN32
+		fd_set allSockSet; // 总的套接字集合 
+		fd_set readSet; // 可读套接字集合 
+		fd_set writeSet; // 可写套接字集合
+		int sListen;
+#endif // WIN32
+
+};
 
 
 #endif

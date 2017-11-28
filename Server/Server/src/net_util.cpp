@@ -15,8 +15,11 @@ namespace mogo
 
     bool MogoSetNonblocking(int sockfd)
     {
-#ifdef linux
+#ifdef __linux__
         return fcntl(sockfd, F_SETFL, fcntl(sockfd, F_GETFD, 0)|O_NONBLOCK) != -1;
+#else
+		//return ioctlsocket(sockfd, FIONBIO, (unsigned long *)1);
+		return 0;
 #endif
     }
 
@@ -38,12 +41,22 @@ namespace mogo
         }
         else
         {
-            addr.sin_addr.s_addr = inet_addr(pszAddr);
+#ifdef __linux__
+			addr.sin_addr.s_addr = inet_addr(pszAddr);
+#else // DEBUG
+			struct in_addr s;
+			inet_pton(PF_INET, "202.168.133.150", (void *)&s);
+			addr.sin_addr.s_addr = s.s_addr;
+#endif
         }
 
         int flag = 1;
         int len = sizeof(int);
-        setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &flag, len);
+#ifdef __linux__
+		setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &flag, len);
+#else // DEBUG
+        //setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, (const char*)&flag, len);
+#endif
         return bind(sockfd, (struct sockaddr*)&addr, sizeof(addr) );
     }
 
@@ -58,31 +71,38 @@ namespace mogo
         memset(&addr, 0, sizeof(addr));
         addr.sin_family = PF_INET;
         addr.sin_port = htons(unPort);
-        addr.sin_addr.s_addr = inet_addr(pszAddr);
+        //addr.sin_addr.s_addr = inet_addr(pszAddr);
 
         return connect(fd, (sockaddr*)&addr, sizeof(addr));
     }
 
 	void MogoSetBuffSize(int fd, int nRcvBuf, int nSndBuf)
 	{	
-		setsockopt(fd, SOL_SOCKET, SO_RCVBUF, (const int*)&nRcvBuf, sizeof(int));	
+#ifdef __linux__
+		setsockopt(fd, SOL_SOCKET, SO_RCVBUF, (const int*)&nRcvBuf, sizeof(int));
 		setsockopt(fd, SOL_SOCKET, SO_SNDBUF, (const int*)&nSndBuf, sizeof(int));
+#else // DEBUG
+		setsockopt(fd, SOL_SOCKET, SO_RCVBUF, (const char*)&nRcvBuf, sizeof(int));	
+		setsockopt(fd, SOL_SOCKET, SO_SNDBUF, (const char*)&nSndBuf, sizeof(int));
+#endif
 	}
 
 	void MogoGetBuffSize(int fd)
 	{
-#ifdef linux
+#ifdef __linux__
 		int n1 = 0,n2 = 0;
 		socklen_t nn1 = sizeof(n1),nn2=sizeof(n2);
 		getsockopt(fd, SOL_SOCKET, SO_RCVBUF, (int*)&n1, &nn1);
 		getsockopt(fd, SOL_SOCKET, SO_SNDBUF, (int*)&n2, &nn2);
 		//printf("222fd=%d;rcv=%d;snd=%d\n", fd, n1, n2);
+#else
+
 #endif
 	}
 
     int MogoAsyncRead(int sockfd, void* buf, size_t bufsize, int nTimeout)
     {
-#ifdef linux
+#ifdef __linux__
         fd_set rfds;       
         FD_ZERO(&rfds);
         FD_SET(sockfd, &rfds);
@@ -98,6 +118,7 @@ namespace mogo
         }
         
         return ret;
-    }
 #endif
+		return 0;
+    }
 };

@@ -21,12 +21,26 @@ CEpollServer::~CEpollServer() {
 }
 
 int CEpollServer::StartServer(const char* pszAddr, uint16_t unPort) {
+
+#ifdef WIN32
+	WSADATA ws;
+	int ret;
+	ret = WSAStartup(MAKEWORD(2, 2), &ws);
+	if (ret != 0)
+	{
+		printf("WSAStartup() 失败!\n");
+		return -1;
+	}
+#endif // WINDOW
+
+
 	m_strAddr.assign(pszAddr);
 	m_unPort = unPort;
 
 	int fd = MogoSocket();
 	if (fd == -1) {
-		ERROR_RETURN2("Failed to create socket");
+		printf("Failed to init socket");
+		return -1;
 	}
 
 	MogoSetNonblocking(fd);
@@ -39,15 +53,17 @@ int CEpollServer::StartServer(const char* pszAddr, uint16_t unPort) {
 
 	int n = MogoBind(fd, pszAddr, unPort);
 	if (n != 0) {
-		printf("bind fail, fd=%d;pszAddr=%s;unPort=%d\n", fd, pszAddr, unPort);
-		ERROR_RETURN2("Failed to bind");
+		printf("Failed to bind");
+		return -1;
 	}
 
-	n = MogoListen(fd, 20);
+	n = MogoListen(fd, 5);
 	if (n != 0) {
-		ERROR_RETURN2("Failed to listen");
+		printf("Failed to listen");
+		return -1;
 	}
 
+#ifdef __linux__
 	m_epfd = epoll_create(MAX_EPOLL_SIZE);
 	if (m_epfd == -1) {
 		ERROR_RETURN2("Failed to epoll_create");
@@ -63,6 +79,10 @@ int CEpollServer::StartServer(const char* pszAddr, uint16_t unPort) {
 		ERROR_RETURN2("Failed to epoll_ctl_add listen fd");
 	}
 
+#else
+	sListen = fd;
+#endif
+
 	AddFdAndMb(fd, FD_TYPE_SERVER, pszAddr, unPort);
 
 	return 0;
@@ -73,7 +93,7 @@ int CEpollServer::Service(const char* pszAddr, unsigned int unPort) {
 	if (nRet != 0) {
 		return nRet;
 	}
-
+#ifdef __linux__
 	struct epoll_event ev;
 	struct epoll_event events[MAX_EPOLL_SIZE];
 
@@ -87,6 +107,7 @@ int CEpollServer::Service(const char* pszAddr, unsigned int unPort) {
 //        int event_count = m_fds.size();
 		int event_count = 10;
 		int nfds = epoll_wait(m_epfd, events, event_count, _EPOLL_TIMEOUT);
+
 		if (nfds == -1) {
 			if (errno == EINTR) //modify-kevin-20130226
 			{
@@ -135,6 +156,74 @@ int CEpollServer::Service(const char* pszAddr, unsigned int unPort) {
 		}
 
 	}
+#else
+	FD_ZERO(&allSockSet); // 清空套接字集合 
+	FD_SET(sListen, &allSockSet); // 将sListen套接字加入套接字集合中 
+	char bufRecv[100]; // 接收缓冲区
+					   // 进入服务器主循环 
+	while (1)
+	{
+		FD_ZERO(&readSet); // 清空可读套接字 
+		FD_ZERO(&writeSet); // 清空可写套接字 
+		readSet = allSockSet; // 赋值 
+		writeSet = allSockSet; // 赋值 
+							   // 调用select函数，timeout设置为NULL 
+		int ret = select(0, &readSet, 0, NULL, NULL);
+		//
+		if (ret == SOCKET_ERROR)
+		{
+			printf("select() 失败!\n");
+			return -1;
+		}
+		// 存在套接字的I/O已经准备好 
+		if (ret > 0)
+		{
+			// 遍历所有套接字 
+			for (int i = 0; i < allSockSet.fd_count; ++i)
+			{
+				int s = allSockSet.fd_array[i];
+				// 存在可读的套接字 
+				if (FD_ISSET(s, &readSet))
+				{
+					// 可读套接字为sListen 
+					if (s == sListen)
+					{
+						int _nRet = HandleNewConnection(s);
+					}
+					else // 接收客户端信息 
+					{
+						ret = recv(s, bufRecv, 100, 0);
+						// 接收错误 
+						if (ret == SOCKET_ERROR)
+						{
+							DWORD err = WSAGetLastError();
+							if (err == WSAECONNRESET)
+								printf("客户端被强行关闭\n");
+							else
+								printf("recv() 失败!");
+							// 删除套接字 
+							FD_CLR(s, &allSockSet);
+							printf("目前客户端数目为：%d\n", allSockSet.fd_count - 1);
+							break;
+						}
+						if (ret == 0)
+						{
+							printf("客户端已经退出!\n");
+							// 删除套接字 
+							FD_CLR(s, &allSockSet);
+							printf("目前客户端数目为：%d\n", allSockSet.fd_count - 1);
+							break;
+						}
+						bufRecv[ret] = '\0';
+						printf("收到的消息：%s\n", bufRecv);
+					} // end else
+
+				}// end if
+
+			}// end for 
+		} // end if 
+	}//end while 
+#endif
 
 	OnShutdownServer();
 
@@ -142,14 +231,19 @@ int CEpollServer::Service(const char* pszAddr, unsigned int unPort) {
 }
 
 void CEpollServer::OnShutdownServer() {
+#ifdef __linux__
 	sleep(2);
+#else
+	Sleep(2000);
+#endif // __linux__
+	
 }
 
 int CEpollServer::HandleNewConnection(int fd) {
 	struct sockaddr_in their_addr;
-	socklen_t their_len = sizeof(their_addr);
+	int their_len = sizeof(their_addr);
 	int new_fd = accept(fd, (struct sockaddr *) &their_addr, &their_len);
-	if (new_fd < 0) {
+	//if (new_fd < 0) {
 //        if(errno == EAGAIN)
 //        {
 //            ERROR_PRINT2("Failed to accept new connection,try EAGAIN\n")
@@ -160,11 +254,11 @@ int CEpollServer::HandleNewConnection(int fd) {
 //            ERROR_PRINT2("Failed to accept new connection")
 //            return -2;
 //        }
-	}
+	//}
 
-	enum {
-		MAX_ACCEPT = 1024 - 20,
-	};
+	//enum {
+	//	MAX_ACCEPT = 1024 - 20,
+	//};
 	//一般linux设置每个进程打开文件数为1024,这个设置正好符合游戏的最大连接数
 	//enum{ MAX_ACCEPT = 4000, };
 //    if(m_fds.size() >= MAX_ACCEPT)
@@ -174,10 +268,12 @@ int CEpollServer::HandleNewConnection(int fd) {
 //        return -3;
 //    }
 
+#ifdef __linux__
 	char* pszClientAddr = inet_ntoa(their_addr.sin_addr);
 	uint16_t unClientPort = ntohs(their_addr.sin_port);
 
 	MogoSetNonblocking(new_fd);
+
 	struct epoll_event ev;
 	memset(&ev, 0, sizeof ev);
 
@@ -187,6 +283,9 @@ int CEpollServer::HandleNewConnection(int fd) {
 		ERROR_PRINT2("Failed to epoll_ctl_add new accepted socket");
 		return -3;
 	}
+#else
+	FD_SET(new_fd, &allSockSet);
+#endif
     this->OnNewFdAccepted(new_fd, their_addr);
 
 	return 0;
@@ -194,10 +293,10 @@ int CEpollServer::HandleNewConnection(int fd) {
 
 int CEpollServer::OnNewFdAccepted(int new_fd, sockaddr_in& addr)
 {
-    char* pszClientAddr = inet_ntoa(addr.sin_addr);
+    /*char* pszClientAddr = inet_ntoa(addr.sin_addr);
     uint16_t unClientPort = ntohs(addr.sin_port);
 
-    AddFdAndMb(new_fd, FD_TYPE_ACCEPT, pszClientAddr, unClientPort);
+    AddFdAndMb(new_fd, FD_TYPE_ACCEPT, pszClientAddr, unClientPort);*/
     //printf("on_new_fd_accepted\n");
     return 0;
 }
@@ -253,17 +352,26 @@ void CEpollServer::AddFdAndMb(int fd, EFDTYPE efd, const char* pszAddr, uint16_t
 
 //服务器主动关闭一个socket
 void CEpollServer::CloseFdFromServer(int fd) {
+
+#ifdef linux
 //    this->OnFdClosed(fd);
 	epoll_ctl(m_epfd, EPOLL_CTL_DEL, fd, NULL);
 	::close(fd);
 //    RemoveFd(fd);
+#else
+
+#endif
 }
 
 //顶掉一个连接
 void CEpollServer::KickOffFd(int fd) {
+#ifdef linux
 	epoll_ctl(m_epfd, EPOLL_CTL_DEL, fd, NULL);
 //    RemoveFd(fd);
 	::close(fd);
+#else
+
+#endif
 }
 
 CMailBox* CEpollServer::GetFdMailbox(int fd)

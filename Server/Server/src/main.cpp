@@ -3,7 +3,7 @@
 int main()
 {
 	CEpollServer sv;
-	sv.Service("202.168.133.195",8888);
+	sv.Service("202.168.133.150",8888);
 
 	return 0;
 }
