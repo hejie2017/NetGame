@@ -241,8 +241,13 @@ void CEpollServer::OnShutdownServer() {
 
 int CEpollServer::HandleNewConnection(int fd) {
 	struct sockaddr_in their_addr;
+#ifdef __linux__
 	unsigned int their_len = sizeof(their_addr);
 	int new_fd = accept(fd, (struct sockaddr *) &their_addr, &their_len);
+#else
+	int their_len = sizeof(their_addr);
+	int new_fd = accept(fd, (struct sockaddr *) &their_addr, &their_len);
+#endif
 	//if (new_fd < 0) {
 //        if(errno == EAGAIN)
 //        {
@@ -293,7 +298,15 @@ int CEpollServer::HandleNewConnection(int fd) {
 
 int CEpollServer::OnNewFdAccepted(int new_fd, sockaddr_in& addr)
 {
-    char* pszClientAddr = inet_ntoa(addr.sin_addr);
+
+#ifdef __linux__
+	char* pszClientAddr = inet_ntoa(addr.sin_addr);
+#else
+	char addr_p[16];
+	struct in_addr addr_n;
+	const char* pszClientAddr = inet_ntop(PF_INET, &addr_n, addr_p, (socklen_t)sizeof(addr_p));
+#endif // __linux__
+
     uint16_t unClientPort = ntohs(addr.sin_port);
 
     AddFdAndMb(new_fd, FD_TYPE_ACCEPT, pszClientAddr, unClientPort);

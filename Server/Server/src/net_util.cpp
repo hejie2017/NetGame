@@ -45,7 +45,7 @@ namespace mogo
 			addr.sin_addr.s_addr = inet_addr(pszAddr);
 #else // DEBUG
 			struct in_addr s;
-			inet_pton(PF_INET, "202.168.133.150", (void *)&s);
+			inet_pton(PF_INET, pszAddr, (void *)&s);
 			addr.sin_addr.s_addr = s.s_addr;
 #endif
         }

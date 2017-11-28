@@ -24,7 +24,7 @@ int main(int argc, char* argv[])
 	sockaddr_in serAddr;
 	serAddr.sin_family = AF_INET;
 	serAddr.sin_port = htons(8888);
-	serAddr.sin_addr.S_un.S_addr = inet_addr("202.168.133.195");
+	serAddr.sin_addr.S_un.S_addr = inet_addr("202.168.133.150");
 	//serAddr.sin_addr.S_un.S_addr = inet_addr("202.168.133.150");
 	if (connect(sclient, (sockaddr *)&serAddr, sizeof(serAddr)) == SOCKET_ERROR)
 	{
