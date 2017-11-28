@@ -1,4 +1,0 @@
-﻿  main.cpp
-f:\netgame\select\select\select\main.cpp(73): warning C4018: “<”: 有符号/无符号不匹配
-  select.vcxproj -> F:\NetGame\Select\select\Debug\select.exe
-  select.vcxproj -> F:\NetGame\Select\select\Debug\select.pdb (Partial PDB)
