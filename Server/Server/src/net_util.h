@@ -2,12 +2,12 @@
 #define __NET_UTIL__HEAD__
 
 #ifdef  __linux__
+#include <sys/epoll.h>
 #include <unistd.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <unistd.h>
-
 #else
 #include <winsock2.h> 
 #include <WS2tcpip.h>

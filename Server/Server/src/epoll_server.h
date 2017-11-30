@@ -1,10 +1,6 @@
 #ifndef __EPOLL_SERVER_HEAD__
 #define __EPOLL_SERVER_HEAD__
 
-#ifdef __linux__
-#include <sys/epoll.h>
-#else
-#endif
 #include "net_util.h"
 #include <string>
 #include <map>

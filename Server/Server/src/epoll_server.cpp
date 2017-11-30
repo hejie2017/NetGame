@@ -16,7 +16,8 @@ CEpollServer::CEpollServer() :
 
 }
 
-CEpollServer::~CEpollServer() {
+CEpollServer::~CEpollServer()
+{
 
 }
 
@@ -168,7 +169,7 @@ int CEpollServer::Service(const char* pszAddr, unsigned int unPort) {
 		readSet = allSockSet; // 赋值 
 		writeSet = allSockSet; // 赋值 
 							   // 调用select函数，timeout设置为NULL 
-		int ret = select(0, &readSet, 0, NULL, NULL);
+		int ret = select(0, &readSet, &writeSet, NULL, NULL);
 		//
 		if (ret == SOCKET_ERROR)
 		{
@@ -181,44 +182,84 @@ int CEpollServer::Service(const char* pszAddr, unsigned int unPort) {
 			// 遍历所有套接字 
 			for (int i = 0; i < allSockSet.fd_count; ++i)
 			{
-				int s = allSockSet.fd_array[i];
-				// 存在可读的套接字 
-				if (FD_ISSET(s, &readSet))
+				int fd = allSockSet.fd_array[i];
+				CMailBox* mb = GetFdMailbox(fd);
+				if (mb == NULL) {
+					continue;
+				}
+				EFDTYPE tfd = mb->GetFdType();
+				switch (tfd)
 				{
-					// 可读套接字为sListen 
-					if (s == sListen)
+					case FD_TYPE_SERVER:
 					{
-						int _nRet = HandleNewConnection(s);
+						int _nRet = HandleNewConnection(fd);
+						break;
 					}
-					else // 接收客户端信息 
+					case FD_TYPE_ACCEPT:
 					{
-						ret = recv(s, bufRecv, 100, 0);
-						// 接收错误 
-						if (ret == SOCKET_ERROR)
+						if (this->HandleMessage(fd, mb) != 0)
 						{
-							DWORD err = WSAGetLastError();
-							if (err == WSAECONNRESET)
-								printf("客户端被强行关闭\n");
-							else
-								printf("recv() 失败!");
-							// 删除套接字 
-							FD_CLR(s, &allSockSet);
-							printf("目前客户端数目为：%d\n", allSockSet.fd_count - 1);
-							break;
+							//--event_count;
 						}
-						if (ret == 0)
-						{
-							printf("客户端已经退出!\n");
-							// 删除套接字 
-							FD_CLR(s, &allSockSet);
-							printf("目前客户端数目为：%d\n", allSockSet.fd_count - 1);
-							break;
-						}
-						bufRecv[ret] = '\0';
-						printf("收到的消息：%s\n", bufRecv);
-					} // end else
+						break;
+					}
 
-				}// end if
+					default:
+					{
+						//FD_TYPE_ERROR
+						break;
+					}
+				}
+
+				//// 存在可读的套接字 
+				//if (FD_ISSET(fd, &readSet))
+				//{
+				//	// 可读套接字为sListen 
+				//	if (fd == sListen)
+				//	{
+				//		int _nRet = HandleNewConnection(fd);
+				//	}
+				//	else if (mb->GetFdType()) // 接收客户端信息 
+				//	{
+				//		//ret = recv(s, bufRecv, 100, 0);
+				//		//// 接收错误 
+				//		//if (ret == SOCKET_ERROR)
+				//		//{
+				//		//	DWORD err = WSAGetLastError();
+				//		//	if (err == WSAECONNRESET)
+				//		//		printf("客户端被强行关闭\n");
+				//		//	else
+				//		//		printf("recv() 失败!");
+				//		//	// 删除套接字 
+				//		//	FD_CLR(s, &allSockSet);
+				//		//	printf("目前客户端数目为：%d\n", allSockSet.fd_count - 1);
+				//		//	break;
+				//		//}
+				//		//if (ret == 0)
+				//		//{
+				//		//	printf("客户端已经退出!\n");
+				//		//	// 删除套接字 
+				//		//	FD_CLR(s, &allSockSet);
+				//		//	printf("目前客户端数目为：%d\n", allSockSet.fd_count - 1);
+				//		//	break;
+				//		//}
+				//		//bufRecv[ret] = '\0';
+				//		//printf("收到的消息：%s\n", bufRecv);
+
+				//		CMailBox* mb = GetFdMailbox(fd);
+				//		if (mb == NULL) {
+				//			continue;
+				//		}
+
+				//		if (this->HandleMessage(fd, mb) != 0)
+				//		{
+				//			//--event_count;
+				//		}
+				//		break;
+				//	} // end else
+
+				//}// end if
+
 
 			}// end for 
 		} // end if 
@@ -405,8 +446,33 @@ CMailBox* CEpollServer::GetFdMailbox(int fd)
 int CEpollServer::HandleMessage(int fd, CMailBox* mb)
 {
 	char szHead[100];
-	int nLen = ::recv(fd, szHead, 50, 0);
-	printf(szHead);
+	int ret = ::recv(fd, szHead, 50, 0);
+
+#ifdef WIN32
+	if (ret == SOCKET_ERROR)
+	{
+		DWORD err = WSAGetLastError();
+		if (err == WSAECONNRESET)
+			printf("client close\n");
+		else
+			printf("recv() fail!");
+		// 删除套接字 
+		FD_CLR(fd, &allSockSet);
+	}
+	if (ret == 0)
+	{
+		printf("client exit\n");
+		// 删除套接字 
+		FD_CLR(fd, &allSockSet);
+	}
+#endif
+
+	if (ret > 0)
+	{
+		szHead[ret] = '\0';
+		printf(szHead);
+	}
+	
 	return -1;
 //    //errno = 0;
 //    int nLen = -1;
