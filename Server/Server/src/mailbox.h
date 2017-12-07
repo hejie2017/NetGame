@@ -1,25 +1,30 @@
+#ifndef __MAIL_BOX__
+#define __MAIL_BOX__
+
+
 #include <string>
 #include <list>
+
 #include "memory_pool.h"
-#include "net_util.h"
 #include "pluto.h"
 
 using namespace std;
-using namespace mogo;
 
-
-enum EFDTYPE{
+enum EFDTYPE {
 	FD_TYPE_SERVER,
 	FD_TYPE_ACCEPT
 };
 
-enum 
+enum
 {
 	SEND_BUFF = 8 * 1024
 };
 
-class CMailBox{
-public:
+class CPluto;
+
+class CMailBox
+{
+	public:
 	CMailBox(short  uid, EFDTYPE fdtype, const char* pszAddr, short  unPort);
 	~CMailBox();
 
@@ -60,11 +65,20 @@ public:
 	{
 		return m_serverPort;
 	}
+
+	inline CPluto* GetRecvPluto()
+	{
+		return m_pluto;
+	}
+
+	inline void SetRecvPluto(CPluto* u)
+	{
+		m_pluto = u;
+	}
 	
-
-
 private:
 	list<CPluto*> m_tobeSend;
+	CPluto* m_pluto;
 	
 	int m_nSendPos;
 
@@ -78,3 +92,5 @@ private:
 
 	static MemoryPool *memPool;
 };
+
+#endif

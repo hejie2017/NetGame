@@ -32,10 +32,10 @@ int main(int argc, char* argv[])
 		closesocket(sclient);
 		return 0;
 	}
-	char * sendData = "hello this is client! \n";
-	char * sendData1 = "This is your order! \n";
+	char * sendData = "0016hello this is client! \n";
+	//char * sendData1 = "This is your order! \n";
 	send(sclient, sendData, strlen(sendData), 0);
-	send(sclient, sendData1, strlen(sendData1), 0);
+	//send(sclient, sendData1, strlen(sendData1), 0);
 	char recData[255];
 	//int ret = recv(sclient, recData, 255, 0);
 	//if (ret > 0)

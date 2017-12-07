@@ -445,240 +445,183 @@ CMailBox* CEpollServer::GetFdMailbox(int fd)
 //直接接收数据至pluto,不需要先接收到buff再copy
 int CEpollServer::HandleMessage(int fd, CMailBox* mb)
 {
-	char szHead[100];
-	int ret = ::recv(fd, szHead, 50, 0);
+	//char szHead[100];
+	//int ret = ::recv(fd, szHead, 50, 0);
 
-#ifdef WIN32
-	if (ret == SOCKET_ERROR)
-	{
-		DWORD err = WSAGetLastError();
-		if (err == WSAECONNRESET)
-			printf("client close\n");
-		else
-			printf("recv() fail!");
-		// 删除套接字 
-		FD_CLR(fd, &allSockSet);
-	}
-	if (ret == 0)
-	{
-		printf("client exit\n");
-		// 删除套接字 
-		FD_CLR(fd, &allSockSet);
-	}
-#endif
+//#ifdef WIN32
+//	if (ret == SOCKET_ERROR)
+//	{
+//		DWORD err = WSAGetLastError();
+//		if (err == WSAECONNRESET)
+//			printf("client close\n");
+//		else
+//			printf("recv() fail!");
+//		// 删除套接字 
+//		FD_CLR(fd, &allSockSet);
+//	}
+//	if (ret == 0)
+//	{
+//		printf("client exit\n");
+//		// 删除套接字 
+//		FD_CLR(fd, &allSockSet);
+//	}
+//#endif
 
-	if (ret > 0)
-	{
-		szHead[ret] = '\0';
-		printf(szHead);
-	}
+	//if (ret > 0)
+	//{
+	//	szHead[ret] = '\0';
+	//	printf(szHead);
+	//}
 	
-	return -1;
-//    //errno = 0;
-//    int nLen = -1;
-//    CPluto* u = mb->GetRecvPluto();
-//    if(u == NULL)
-//    {
-//        //新包
-//        //接收包头
-//        char szHead[PLUTO_MSGLEN_HEAD];
-//        nLen = ::recv(fd, szHead, PLUTO_MSGLEN_HEAD, 0);
-//
-//        //LogDebug("hdm_recv1", "fd=%d;want=%d;recv=%d", fd, PLUTO_MSGLEN_HEAD, nLen);
-//        if(nLen > 0)
-//        {
-//            if(nLen == PLUTO_MSGLEN_HEAD)
-//            {
-//                uint32_t nMsgLen = sz_to_uint32((unsigned char*)szHead);
-//
-//                if (nMsgLen > 65536)
-//                {
-////                    LogWarning("CEpollServer::HandleMessage warning", "nMsgLen=%d;ServerName=%s;ServerType=%d",
-////                                                                       nMsgLen, mb->GetServerName().c_str(), mb->GetServerMbType());
-////                    PrintHex16(szHead, (size_t)nLen);
-//                }
-//
-//                //PLUTO_HEAD_SIZE_CHECK(fd, mb, nMsgLen);
-//                int result = this->CheckPlutoHeadSize(fd, mb, nMsgLen);
-//                if (result < 0)
-//                {
-//                    return result;
-//                }
-//
-//                u = new CPluto(nMsgLen);
-//
-//                //copy head
-//                char* szBuff = u->GetRecvBuff();
-//                memcpy(szBuff, szHead, PLUTO_MSGLEN_HEAD);
-//
-//                //接收包体
-//                int nWanted = nMsgLen-PLUTO_MSGLEN_HEAD;
-//                nLen = ::recv(fd, szBuff+PLUTO_MSGLEN_HEAD, nWanted, 0);
-//                //LogDebug("hdm_recv2", "fd=%d;want=%d;recv=%d", fd, nWanted, nLen);
-//                if(nLen > 0)
-//                {
-//                    if(nLen == nWanted)
-//                    {
-//                        //接收完整
-//                        u->EndRecv(nMsgLen);
-//                        u->SetMailbox(mb);
-//                        AddRecvMsg(u);
-//                        mb->SetRecvPluto(NULL); //置空
-//
-//                        //printf("recv all\n");
-//                        //PrintHexPluto(*u);
-//                        //LogDebug("CEpollServer::HandleMessage all", "msg_id=%d", u->GetMsgId());
-//                        //可能还有其他包要收
-//#ifdef HANDLE_MESSAGE_OLD
-//                        return HandleMessage(fd, mb);
-//#else
-//                        return -4;
-//#endif
-//                    }
-//                    else
-//                    {
-//                        //接收不完整,留到下次接着处理
-//                        u->SetLen(PLUTO_MSGLEN_HEAD+nLen);
-//                        mb->SetRecvPluto(u);
-//
-//                        //PrintHexPluto(*u);
-//                        //LogDebug("CEpollServer::HandleMessage part", "msg_id=%d", u->GetMsgId());
-//                        //printf("recv part11\n");
-//                        return PLUTO_MSGLEN_HEAD+nLen;
-//                    }
-//                }
-//                else if(nLen < 0)
-//                {
-//                    if(errno == EAGAIN || errno == EINPROGRESS)
-//                    {
-//                        //接收不完整,留到下次接着处理
-//                        u->SetLen(PLUTO_MSGLEN_HEAD);
-//                        mb->SetRecvPluto(u);
-//
-//                        //print_hex_pluto(*u);
-//                        //printf("recv part11\n");
-//                        return PLUTO_MSGLEN_HEAD;
-//                    }
-//                }
-//
-//                delete u;//这个u是前面new出来的,不用提供给其他地方处理
-//                u = NULL;
-//            }
-//            else
-//            {
-//                //包头没有接收完
-//                u = new CPluto(PLUTO_MSGLEN_HEAD);
-//                char* szBuff = u->GetRecvBuff();
-//                memcpy(szBuff, szHead, nLen);
-//                u->SetLen(nLen);
-//                mb->SetRecvPluto(u);
-//
-//                //print_hex_pluto(*u);
-//                //printf("recv part22\n");
-//                return nLen;
-//            }
-//        }
-//    }
-//    else
-//    {
-//        char* szBuff = u->GetRecvBuff();
-//        int nLastLen = u->GetLen();     //上次接收到的数据长度
-//        if(nLastLen < PLUTO_MSGLEN_HEAD)
-//        {
-//            //包头未收完
-//            int nWanted = PLUTO_MSGLEN_HEAD - nLastLen;
-//            nLen = ::recv(fd, szBuff+nLastLen, nWanted, 0);
-//            //LogDebug("hdm_recv3", "fd=%d;want=%d;recv=%d", fd, nWanted, nLen);
-//            if(nLen > 0)
-//            {
-//                if(nLen == nWanted)
-//                {
-//                    int nMsgLen = sz_to_uint32((unsigned char*)szBuff);
-//                    //PLUTO_HEAD_SIZE_CHECK(fd, mb, nMsgLen);
-//
-//                    int result = this->CheckPlutoHeadSize(fd, mb, nMsgLen);
-//                    if (result < 0)
-//                    {
-//                        return result;
-//                    }
-//
-//                    CPluto* u2 = new CPluto(nMsgLen);
-//                    memcpy(u2->GetRecvBuff(), szBuff, PLUTO_MSGLEN_HEAD);
-//                    u2->SetLen(PLUTO_MSGLEN_HEAD);
-//                    mb->SetRecvPluto(u2);
-//                    delete u;
-//
-//                    //printf("recv all88\n");
-//                    //print_hex_pluto(*u2);
-//
-//#ifdef HANDLE_MESSAGE_OLD
-//                    return HandleMessage(fd, mb);
-//#else
-//                    return -4;
-//#endif
-//                }
-//                else
-//                {
-//                    //printf("recv part99\n");
-//                    //仍然未接收完
-//                    u->SetLen(nLastLen+nLen);
-//                    //print_hex_pluto(*u);
-//                    return nLen;
-//                }
-//            }
-//        }
-//        else
-//        {
-//            int nWanted = u->GetBuffSize() - nLastLen;
-//            nLen = ::recv(fd, szBuff+nLastLen, nWanted, 0);
-//            //LogDebug("hdm_recv4", "fd=%d;want=%d;recv=%d", fd, nWanted, nLen);
-//            if(nLen > 0)
-//            {
-//                if(nLen == nWanted)
-//                {
-//                    //接收完整
-//                    u->EndRecv(nLastLen+nLen);
-//                    u->SetMailbox(mb);
-//                    AddRecvMsg(u);
-//                    mb->SetRecvPluto(NULL); //置空
-//
-//                    //printf("recv part33\n");
-//                    //print_hex_pluto(*u);
-//                    //可能还有其他包要处理
-//
-//#ifdef HANDLE_MESSAGE_OLD
-//                    return HandleMessage(fd, mb);
-//#else
-//                    return -4;
-//#endif
-//                }
-//                else
-//                {
-//                    //printf("recv part44\n");
-//                    //接收不完整,留到下次接着处理
-//                    u->SetLen(nLastLen+nLen);
-//                    //print_hex_pluto(*u);
-//
-//                    return nLen;
-//                }
-//            }
-//        }
-//    }
-//
-//    if(nLen == 0)
-//    {
-//        //client close
-//    }
-//    else
-//    {
-//        if(errno == EAGAIN)
-//        {
-//            return 0;
-//        }
-////        LogWarning("handle_message_err", "failed, %d,'%s'",errno, strerror(errno));
-//    }
-//    //LogDebug("hdm_recv_err", "fd=%d;recv=%d;err=%d", fd, nLen, errno);
-//    close(fd);
-//    return -1;
+	//return -1;
+    //errno = 0;
+    int nLen = -1;
+    CPluto* u = mb->GetRecvPluto();
+    if(u == NULL)
+    {
+        //新包
+        //接收包头
+        char szHead[PLUTO_MSGLEN_HEAD];
+        nLen = ::recv(fd, szHead, PLUTO_MSGLEN_HEAD, 0);
+
+		printf(szHead);
+		return 0;
+
+        //LogDebug("hdm_recv1", "fd=%d;want=%d;recv=%d", fd, PLUTO_MSGLEN_HEAD, nLen);
+        if(nLen > 0)
+        {
+            if(nLen == PLUTO_MSGLEN_HEAD)
+            {
+                uint32_t nMsgLen = sz_to_uint32((unsigned char*)szHead);
+
+                if (nMsgLen > 65536)
+                {
+
+                }
+
+                //PLUTO_HEAD_SIZE_CHECK(fd, mb, nMsgLen);
+                int result = this->CheckPlutoHeadSize(fd, mb, nMsgLen);
+                if (result < 0)
+                {
+                    return result;
+                }
+
+                u = new CPluto(nMsgLen);
+
+                //copy head
+                char* szBuff = u->GetRecvBuff();
+                memcpy(szBuff, szHead, PLUTO_MSGLEN_HEAD);
+
+                //接收包体
+                int nWanted = nMsgLen-PLUTO_MSGLEN_HEAD;
+                nLen = ::recv(fd, szBuff+PLUTO_MSGLEN_HEAD, nWanted, 0);
+
+                if(nLen > 0)
+                {
+                    if(nLen == nWanted)
+                    {
+                        //接收完整
+                        u->EndRecv(nMsgLen);
+                        u->SetMailbox(mb);
+                        AddRecvMsg(u);
+                        mb->SetRecvPluto(NULL); //置空
+
+                        return -4;
+
+                    }
+                    else
+                    {
+                        //接收不完整,留到下次接着处理
+                        u->SetLen(PLUTO_MSGLEN_HEAD+nLen);
+                        mb->SetRecvPluto(u);
+
+                        //PrintHexPluto(*u);
+                        //LogDebug("CEpollServer::HandleMessage part", "msg_id=%d", u->GetMsgId());
+                        //printf("recv part11\n");
+                        return PLUTO_MSGLEN_HEAD+nLen;
+                    }
+                }
+                else if(nLen < 0)
+                {
+                    if(errno == EAGAIN || errno == EINPROGRESS)
+                    {
+                        //接收不完整,留到下次接着处理
+                        u->SetLen(PLUTO_MSGLEN_HEAD);
+                        mb->SetRecvPluto(u);
+
+                        //print_hex_pluto(*u);
+                        //printf("recv part11\n");
+                        return PLUTO_MSGLEN_HEAD;
+                    }
+                }
+
+                delete u;//这个u是前面new出来的,不用提供给其他地方处理
+                u = NULL;
+            }
+            
+        }
+    }
+
+
+    if(nLen == 0)
+    {
+        //client close
+    }
+    else
+    {
+        if(errno == EAGAIN)
+        {
+            return 0;
+        }
+
+    }
+
+	
+#ifdef WIN32
+	closesocket(fd);
+#else
+    close(fd);
+#endif
+    return -1;
+}
+
+void CEpollServer::AddRecvMsg(CPluto* u)
+{
+	m_recvMsgs.push_back(u);
+
+	//每收到一个包就把该连接上的包数量累加1
+	if (!u)
+	{
+		return;
+	}
+	CMailBox* mb = u->GetMailbox();
+	if (mb)
+	{
+		int fd = mb->GetFd();
+		map<int, uint32_t>::iterator iter = this->m_fd2Plutos.find(fd);
+		if (iter != this->m_fd2Plutos.end())
+		{
+			iter->second++;
+		}
+		else
+		{
+			this->m_fd2Plutos.insert(make_pair(fd, 1));
+		}
+	}
+}
+
+int CEpollServer::CheckPlutoHeadSize(int fd, CMailBox* mb, uint32_t nMsgLen)
+{
+	if (nMsgLen < PLUTO_FILED_BEGIN_POS)
+	{
+#ifdef WIN32
+		closesocket(fd);
+#else
+		close(fd);
+#endif
+		return -2;
+	}
+
+	return 0;
 }
 

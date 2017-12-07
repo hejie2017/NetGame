@@ -43,6 +43,9 @@ class CEpollServer
         void AddFdAndMb(int fd, CMailBox* pmb);
         void AddFdAndMb(int fd, EFDTYPE efd, const char* pszAddr, uint16_t unPort);
         int HandleMessage(int fd, CMailBox* mb);
+		int CheckPlutoHeadSize(int fd, CMailBox* mb, uint32_t nMsgLen);
+		void AddRecvMsg(CPluto* u);
+
     protected:
         string m_strAddr;
         uint16_t m_unPort;
@@ -51,6 +54,8 @@ class CEpollServer
         int m_epfd;
 
         map<int, CMailBox*> m_fds;
+		list<CPluto*> m_recvMsgs;
+		map<int, uint32_t> m_fd2Plutos;
 
 #ifdef WIN32
 		fd_set allSockSet; // 总的套接字集合 
