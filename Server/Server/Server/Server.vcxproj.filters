@@ -18,6 +18,27 @@
     <ClCompile Include="..\src\net_util.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\bitcryto.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\defparser.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mutex.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\pluto.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\rpc_mogo.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\type_mogo.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\util.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\epoll_server.h">
@@ -27,6 +48,30 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\src\net_util.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\bitcryto.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\defparser.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\memory_pool.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\mutex.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\pluto.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\rpc_mogo.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\type_mogo.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\util.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

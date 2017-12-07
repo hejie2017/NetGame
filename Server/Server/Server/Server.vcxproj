@@ -111,15 +111,30 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\bitcryto.cpp" />
+    <ClCompile Include="..\src\defparser.cpp" />
     <ClCompile Include="..\src\epoll_server.cpp" />
     <ClCompile Include="..\src\mailbox.cpp" />
     <ClCompile Include="..\src\main.cpp" />
+    <ClCompile Include="..\src\mutex.cpp" />
     <ClCompile Include="..\src\net_util.cpp" />
+    <ClCompile Include="..\src\pluto.cpp" />
+    <ClCompile Include="..\src\rpc_mogo.cpp" />
+    <ClCompile Include="..\src\type_mogo.cpp" />
+    <ClCompile Include="..\src\util.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\src\bitcryto.h" />
+    <ClInclude Include="..\src\defparser.h" />
     <ClInclude Include="..\src\epoll_server.h" />
     <ClInclude Include="..\src\mailbox.h" />
+    <ClInclude Include="..\src\memory_pool.h" />
+    <ClInclude Include="..\src\mutex.h" />
     <ClInclude Include="..\src\net_util.h" />
+    <ClInclude Include="..\src\pluto.h" />
+    <ClInclude Include="..\src\rpc_mogo.h" />
+    <ClInclude Include="..\src\type_mogo.h" />
+    <ClInclude Include="..\src\util.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\src\Makefile" />
