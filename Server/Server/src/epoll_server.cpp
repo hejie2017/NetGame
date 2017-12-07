@@ -481,10 +481,12 @@ int CEpollServer::HandleMessage(int fd, CMailBox* mb)
     {
         //新包
         //接收包头
-        char szHead[PLUTO_MSGLEN_HEAD];
-        nLen = ::recv(fd, szHead, PLUTO_MSGLEN_HEAD, 0);
-
+		char szHead[PLUTO_MSGLEN_HEAD];
+		nLen = ::recv(fd, szHead, PLUTO_MSGLEN_HEAD, 0);
+		szHead[nLen] = '\0';
+		const char* pp = "0016";
 		printf(szHead);
+		printf(pp);
 		return 0;
 
         //LogDebug("hdm_recv1", "fd=%d;want=%d;recv=%d", fd, PLUTO_MSGLEN_HEAD, nLen);

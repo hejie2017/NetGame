@@ -1,18 +1,18 @@
 /*----------------------------------------------------------------
-// Copyright (C) 2013 ¹ãÖÝ£¬°®ÓÎ
+// Copyright (C) 2013 ï¿½ï¿½ï¿½Ý£ï¿½ï¿½ï¿½ï¿½ï¿½
 //
-// Ä£¿éÃû£ºutil
-// ´´½¨Õß£ºSteven Yang
-// ÐÞ¸ÄÕßÁÐ±í£º
-// ´´½¨ÈÕÆÚ£º2013.1.5
-// Ä£¿éÃèÊö£º³£ÓÃº¯Êý¼¯ºÏ
+// Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½util
+// ï¿½ï¿½ï¿½ï¿½ï¿½ß£ï¿½Steven Yang
+// ï¿½Þ¸ï¿½ï¿½ï¿½ï¿½Ð±ï¿½
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú£ï¿½2013.1.5
+// Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ãºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 //----------------------------------------------------------------*/
 
 #include <stdarg.h>
+#include <sstream>
 #ifdef _WIN32
 #include <functional>   // std::not1
 #include <direct.h>
-#include <sstream>
 #else
 #include <sys/time.h>
 #include <sys/stat.h>
@@ -89,7 +89,7 @@ namespace mogo
 	}
 
 
-	//Ìæ»»stringÖÐµÚÒ»´Î³öÏÖµÄÄ³¸ö²¿·Ö
+	//ï¿½æ»»stringï¿½Ðµï¿½Ò»ï¿½Î³ï¿½ï¿½Öµï¿½Ä³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	string& xReplace(string& s1, const char* pszSrc, const char* pszRep)
 	{
 		string::size_type nPos1 = s1.find(pszSrc);
@@ -103,7 +103,7 @@ namespace mogo
 	}
 
 
-	//ÅÐ¶ÏÒ»¸öÅäÖÃÎÄ¼þ¶ÁÈ¡µÄÂ·¾¶Ãû×îºóÊÇ·ñ´øÂ·¾¶·Ö¸ô·û£¬Èç¹ûÃ»ÓÐÔò¼ÓÉÏ
+	//ï¿½Ð¶ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½È¡ï¿½ï¿½Â·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½Â·ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	string FormatPathName(const string& strPath)
 	{
 		if (strPath[strPath.size() - 1] == g_cPathSplit[0])
@@ -117,7 +117,7 @@ namespace mogo
 		return strPath1;
 	}
 
-	//É¾³ý×Ö·û´®ÓÒ±ßµÄ¿Õ¸ñ
+	//É¾ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½Ò±ßµÄ¿Õ¸ï¿½
 	char* Rtrim(char* p)
 	{
 		if (p == NULL)
@@ -143,7 +143,7 @@ namespace mogo
 		return p;
 	}
 
-	//É¾³ý×Ö·û´®×ó±ßµÄ¿Õ¸ñ
+	//É¾ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ßµÄ¿Õ¸ï¿½
 	char* Ltrim(char* p)
 	{
 		if (p == NULL)
@@ -166,8 +166,8 @@ namespace mogo
 		return p;
 	}
 
-	//±È½ÏÒ»¸ö×Ö·û´´µÄ´óÐ´ÊÇ·ñÆ¥ÅäÒ»¸ö´óÐ´µÄ×Ö·û´®
-	//Ò²¿ÉÒÔÓÃstrcasecmp
+	//ï¿½È½ï¿½Ò»ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½Ä´ï¿½Ð´ï¿½Ç·ï¿½Æ¥ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½
+	//Ò²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½strcasecmp
 	bool UpperStrCmp(const char* src, const char* dest)
 	{
 		if (strlen(src) != strlen(dest))
@@ -193,11 +193,11 @@ namespace mogo
 			return true;
 		}
 
-		//srcºÍdestÈÎÒ»¸öÎªNULL,¶¼ÈÏÎªfalse
+		//srcï¿½ï¿½destï¿½ï¿½Ò»ï¿½ï¿½ÎªNULL,ï¿½ï¿½ï¿½ï¿½Îªfalse
 		return false;
 	}
 
-	//°´ÕÕ·Ö¸ô·ûnDelim²ð·Ö×Ö·û´®
+	//ï¿½ï¿½ï¿½Õ·Ö¸ï¿½ï¿½ï¿½nDelimï¿½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½
 	list<string> SplitString(const string& s1, int nDelim)
 	{
 		list<string> l;
@@ -304,7 +304,7 @@ namespace mogo
 	{
 		if (pszDirName == NULL || strlen(pszDirName) == 0)
 		{
-			cout << "ÊäÈëÄ¿Â¼Ãû³ÆÎª¿Õ!" << endl;
+			cout << "ï¿½ï¿½ï¿½ï¿½Ä¿Â¼ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½!" << endl;
 		}
 
 #ifdef _WIN32
@@ -312,12 +312,12 @@ namespace mogo
 		{
 			if (bLog)
 			{
-				cout << "¼ì²âµ½´æÔÚÄ¿Â¼:" << pszDirName << endl;
+				cout << "ï¿½ï¿½âµ½ï¿½ï¿½ï¿½ï¿½Ä¿Â¼:" << pszDirName << endl;
 			}
 		}
 		else
 		{
-			cout << "³É¹¦´´½¨ÁËÄ¿Â¼:" << pszDirName << endl;
+			cout << "ï¿½É¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿Â¼:" << pszDirName << endl;
 		}
 #else
 
@@ -325,17 +325,17 @@ namespace mogo
 		DIR* pDir = opendir(pszDirName);
 		if (pDir == NULL)
 		{
-			cout << "Ã»ÓÐÕâ¸öÄ¿Â¼:" << pszDirName << endl;
+			cout << "Ã»ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿Â¼:" << pszDirName << endl;
 			if (mkdir(pszDirName, 0777) == 0)
 			{
 				if (bLog)
 				{
-					cout << "³É¹¦´´½¨ÁËÄ¿Â¼:" << pszDirName << endl;
+					cout << "ï¿½É¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿Â¼:" << pszDirName << endl;
 				}
 			}
 			else
 			{
-				ThrowException(-1, "´´½¨Ä¿Â¼Ê§°Ü");
+
 			}
 		}
 		else
@@ -343,7 +343,7 @@ namespace mogo
 			closedir(pDir);
 			if (bLog)
 			{
-				cout << "¼ì²âµ½´æÔÚÄ¿Â¼:" << pszDirName << endl;
+				cout << "ï¿½ï¿½âµ½ï¿½ï¿½ï¿½ï¿½Ä¿Â¼:" << pszDirName << endl;
 			}
 		}
 #endif
@@ -351,9 +351,9 @@ namespace mogo
 
 
 #ifdef _WIN32
-	const char g_cPathSplit[2] = "\\";      //Â·¾¶·Ö¸ô·û
+	const char g_cPathSplit[2] = "\\";      //Â·ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½
 #else
-	const char g_cPathSplit[2] = "/";       //Â·¾¶·Ö¸ô·û
+	const char g_cPathSplit[2] = "/";       //Â·ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½
 #endif
 
 
@@ -516,7 +516,7 @@ namespace mogo
 	}
 #endif
 
-	//linuxÏÂÓÃgettimeofdayÀ´¼ÆËãÊ±¼ä
+	//linuxï¿½ï¿½ï¿½ï¿½gettimeofdayï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
 #ifdef __linux__
 	CGetTimeOfDay::CGetTimeOfDay()
 	{
@@ -545,7 +545,7 @@ namespace mogo
 #endif
 	}
 
-	//»ñÈ¡µ±Ç°Ê±¼äºÍÉÏ´ÎµÄÁ÷ÊÅÊ±¼ä
+	//ï¿½ï¿½È¡ï¿½ï¿½Ç°Ê±ï¿½ï¿½ï¿½ï¿½Ï´Îµï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
 	int CGetTimeOfDay::GetLapsedTime()
 	{
 #ifndef _WIN32

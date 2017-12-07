@@ -1,11 +1,11 @@
 /*----------------------------------------------------------------
-// Copyright (C) 2013 ¹ãÖÝ£¬°®ÓÎ
+// Copyright (C) 2013 ï¿½ï¿½ï¿½Ý£ï¿½ï¿½ï¿½ï¿½ï¿½
 //
-// Ä£¿éÃû£ºpluto
-// ´´½¨Õß£ºSteven Yang
-// ÐÞ¸ÄÕßÁÐ±í£º
-// ´´½¨ÈÕÆÚ£º2013.1.5
-// Ä£¿éÃèÊö£ºrpc ÒÔ¼° entity µÄ¶þ½øÖÆ·â×°
+// Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½pluto
+// ï¿½ï¿½ï¿½ï¿½ï¿½ß£ï¿½Steven Yang
+// ï¿½Þ¸ï¿½ï¿½ï¿½ï¿½Ð±ï¿½
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú£ï¿½2013.1.5
+// Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½rpc ï¿½Ô¼ï¿½ entity ï¿½Ä¶ï¿½ï¿½ï¿½ï¿½Æ·ï¿½×°
 //----------------------------------------------------------------*/
 
 #include <string.h>
@@ -29,7 +29,7 @@ using namespace mogo;
 using namespace std;
 
 static const unsigned char sg_mycryto_key[] = { 15, 180, 213, 37, 40, 98, 85, 7, 152, 223, 48, 168, 71, 102, 191, 194 };
-CBitCryto sg_mycryto((char*)sg_mycryto_key, sizeof(sg_mycryto_key)); //¿Í»§¶Ë·þÎñÆ÷½»»¥°ü¼Ó½âÃÜÀà
+CBitCryto sg_mycryto((char*)sg_mycryto_key, sizeof(sg_mycryto_key)); //ï¿½Í»ï¿½ï¿½Ë·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 mogo::MemoryPool* CPluto::memPool = NULL;
 
@@ -192,7 +192,7 @@ float64_t sz_to_float64(unsigned char* s)
 #endif
 
 
-//½«ÖµÈç0x12µÄchar×ª»»Îª×Ö·û´®"12"
+//ï¿½ï¿½Öµï¿½ï¿½0x12ï¿½ï¿½char×ªï¿½ï¿½Îªï¿½Ö·ï¿½ï¿½ï¿½"12"
 void char_to_sz(unsigned char c, char* s)
 {
 	//char tmp[3];
@@ -210,11 +210,11 @@ void char_to_sz(unsigned char c, char* s)
 
 }
 
-//½«ÐÎÈç"12"µÄ×Ö·û´´×ª»»ÎªÖµÎª0x12µÄchar
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"12"ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½×ªï¿½ï¿½ÎªÖµÎª0x12ï¿½ï¿½char
 unsigned char sz_to_char(char* s)
 {
 	unsigned int i;
-	sscanf_s(s, "%02x", &i);
+	sscanf(s, "%02x", &i);
 	unsigned char c = (unsigned char)i;
 	return c;
 }
@@ -281,7 +281,7 @@ SEntityPropFromPluto::~SEntityPropFromPluto()
 CPluto::CPluto(uint32_t buff_size/* = DEFAULT_PLUTO_BUFF_SIZE*/) : m_unLen(0), m_unMaxLen(0), m_nDecodeErrIdx(0), m_mb(NULL), m_bEncodeErr(false)
 
 #ifdef __OPTIMIZE_PLUTO
-, m_SendPos(0)    //¼ÇÂ¼ÒÑ¾­¿½±´µ½·¢ËÍ»º³åÇøµÄbuffÆ«ÒÆ
+, m_SendPos(0)    //ï¿½ï¿½Â¼ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½buffÆ«ï¿½ï¿½
 #endif
 
 {
@@ -292,7 +292,7 @@ CPluto::CPluto(uint32_t buff_size/* = DEFAULT_PLUTO_BUFF_SIZE*/) : m_unLen(0), m
 CPluto::CPluto(const char* s, uint32_t n) : m_unLen(n), m_unMaxLen(n), m_nDecodeErrIdx(0), m_mb(NULL), m_unBuffSize(n), m_bEncodeErr(false)
 
 #ifdef __OPTIMIZE_PLUTO
-, m_SendPos(0)    //¼ÇÂ¼ÒÑ¾­¿½±´µ½·¢ËÍ»º³åÇøµÄbuffÆ«ÒÆ
+, m_SendPos(0)    //ï¿½ï¿½Â¼ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½buffÆ«ï¿½ï¿½
 #endif
 
 {
@@ -360,7 +360,7 @@ void CPluto::expandMemoryPool()
 	//m_lock.Unlock();
 }
 
-//ÊäÈë
+//ï¿½ï¿½ï¿½ï¿½
 CPluto& CPluto::Encode(pluto_msgid_t msgid)
 {
 	m_unLen = MSGLEN_HEAD + MSGLEN_RESERVED;
@@ -368,7 +368,7 @@ CPluto& CPluto::Encode(pluto_msgid_t msgid)
 	return *this;
 }
 
-//encodeÊ±×Ô¶¯µ÷Õûbuff´óÐ¡
+//encodeÊ±ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½buffï¿½ï¿½Ð¡
 void CPluto::Resize(uint32_t n)
 {
 	if (m_unLen + n <= m_unBuffSize)
@@ -376,9 +376,9 @@ void CPluto::Resize(uint32_t n)
 		return;
 	}
 
-	//buff´óÐ¡²»×ã,ÐèÒªÀ©Õ¹
+	//buffï¿½ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½Òªï¿½ï¿½Õ¹
 	uint32_t old_buffsize = m_unBuffSize;
-	enum { resize_times = 2 }; //ÐèÒªÀ©Õ¹buffÊ±µÄ±¶Êý
+	enum { resize_times = 2 }; //ï¿½ï¿½Òªï¿½ï¿½Õ¹buffÊ±ï¿½Ä±ï¿½ï¿½ï¿½
 	uint32_t new_buffsize = (m_unLen + n)*resize_times;
 	enum { MIDDLE_SIZE = 4096, HIGH_SIZE = MIDDLE_SIZE * 16 };
 	if (new_buffsize <= MIDDLE_SIZE)
@@ -511,12 +511,12 @@ CPluto& CPluto::operator<< (float64_t f)
 CPluto& CPluto::operator<< (const char* s)
 {
 	enum { MAX_LEN = 65534, PRINT_LEN = 48, };
-	size_t src_n = strlen(s);	//Î´×ª»»Îªuint16µÄÔ­Ê¼³¤¶È
+	size_t src_n = strlen(s);	//Î´×ªï¿½ï¿½Îªuint16ï¿½ï¿½Ô­Ê¼ï¿½ï¿½ï¿½ï¿½
 	if (src_n >= MAX_LEN)
 	{
-		SetEncodeErr();			//Éè´íÎó±ê¼Ç
+		SetEncodeErr();			//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
-		PrintHex(s, PRINT_LEN);	//Ö»¼ÇÂ¼Ç°48¸ö×Ö·û
+		PrintHex(s, PRINT_LEN);	//Ö»ï¿½ï¿½Â¼Ç°48ï¿½ï¿½ï¿½Ö·ï¿½
 	}
 
 	uint16_t n = (uint16_t)src_n;
@@ -532,11 +532,11 @@ CPluto& CPluto::operator<< (const char* s)
 CPluto& CPluto::operator<< (const string& s)
 {
 	enum { MAX_LEN = 65534, PRINT_LEN = 48, };
-	size_t src_n = s.size();	//Î´×ª»»Îªuint16µÄÔ­Ê¼³¤¶È
+	size_t src_n = s.size();	//Î´×ªï¿½ï¿½Îªuint16ï¿½ï¿½Ô­Ê¼ï¿½ï¿½ï¿½ï¿½
 	if (src_n >= MAX_LEN)
 	{
-		SetEncodeErr();			//Éè´íÎó±ê¼Ç
-		PrintHex(s.c_str(), PRINT_LEN);	//Ö»¼ÇÂ¼Ç°48¸ö×Ö·û
+		SetEncodeErr();			//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		PrintHex(s.c_str(), PRINT_LEN);	//Ö»ï¿½ï¿½Â¼Ç°48ï¿½ï¿½ï¿½Ö·ï¿½
 	}
 
 	uint16_t n = (uint16_t)src_n;
@@ -577,20 +577,20 @@ CPluto& CPluto::operator<< (const CEntityMailbox& m)
 //	return u;
 //}
 
-//Êä³ö
-//°üÍ·Àï¼ÇÂ¼µÄ°ü³¤¶È
+//ï¿½ï¿½ï¿½
+//ï¿½ï¿½Í·ï¿½ï¿½ï¿½Â¼ï¿½Ä°ï¿½ï¿½ï¿½ï¿½ï¿½
 uint32_t CPluto::GetMsgLen()
 {
 	return sz_to_uint32((unsigned char*)m_szBuff);
 }
 
-//È¥µô°üÍ·µÄÊ£ÏÂ³¤¶È
+//È¥ï¿½ï¿½ï¿½ï¿½Í·ï¿½ï¿½Ê£ï¿½Â³ï¿½ï¿½ï¿½
 uint32_t CPluto::GetMsgLeftLen()
 {
 	return GetMsgLen() - MSGLEN_HEAD;
 }
 
-//ÏûÏ¢id
+//ï¿½ï¿½Ï¢id
 pluto_msgid_t CPluto::GetMsgId()
 {
 	return sz_to_msgid<pluto_msgid_t>((unsigned char*)(m_szBuff + MSGLEN_HEAD + MSGLEN_RESERVED));
@@ -600,7 +600,7 @@ CPluto& CPluto::Decode()
 {
 	if (GetMsgId() < MAX_CLIENT_SERVER_MSGID)
 	{
-		//¿Í»§¶Ë°üÐèÒª½âÃÜ
+		//ï¿½Í»ï¿½ï¿½Ë°ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½
 		sg_mycryto.Reset();
 		for (uint32_t i = MSGLEN_TEXT_POS; i<m_unMaxLen; ++i)
 		{
@@ -618,7 +618,7 @@ CPluto& CPluto::operator>>(uint8_t& n)
 	uint32_t nNewLen = m_unLen + sizeof(n);
 	if (nNewLen > m_unMaxLen)
 	{
-		//×Ö·ûÊý²»¹»½âÎö
+		//ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		m_nDecodeErrIdx = m_unLen;
 	}
 	else
@@ -635,7 +635,7 @@ CPluto& CPluto::operator>>(uint16_t& n)
 	uint32_t nNewLen = m_unLen + sizeof(n);
 	if (nNewLen > m_unMaxLen)
 	{
-		//×Ö·ûÊý²»¹»½âÎö
+		//ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		m_nDecodeErrIdx = m_unLen;
 	}
 	else
@@ -652,7 +652,7 @@ CPluto& CPluto::operator>>(uint32_t& n)
 	uint32_t nNewLen = m_unLen + sizeof(n);
 	if (nNewLen > m_unMaxLen)
 	{
-		//×Ö·ûÊý²»¹»½âÎö
+		//ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		m_nDecodeErrIdx = m_unLen;
 	}
 	else
@@ -669,7 +669,7 @@ CPluto& CPluto::operator>>(uint64_t& n)
 	uint32_t nNewLen = m_unLen + sizeof(n);
 	if (nNewLen > m_unMaxLen)
 	{
-		//×Ö·ûÊý²»¹»½âÎö
+		//ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		m_nDecodeErrIdx = m_unLen;
 	}
 	else
@@ -725,7 +725,7 @@ CPluto& CPluto::operator>>(float32_t& f)
 	uint32_t nNewLen = m_unLen + sizeof(f);
 	if (nNewLen > m_unMaxLen)
 	{
-		//×Ö·ûÊý²»¹»½âÎö
+		//ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		m_nDecodeErrIdx = m_unLen;
 	}
 	else
@@ -749,7 +749,7 @@ CPluto& CPluto::operator>>(float64_t& f)
 	uint32_t nNewLen = m_unLen + sizeof(f);
 	if (nNewLen > m_unMaxLen)
 	{
-		//×Ö·ûÊý²»¹»½âÎö
+		//ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		m_nDecodeErrIdx = m_unLen;
 	}
 	else
@@ -839,7 +839,7 @@ CPluto& EndPluto(CPluto& u)
 
 	if (u.GetMsgId() < MAX_CLIENT_SERVER_MSGID)
 	{
-		//¿Í»§¶Ë°üÐèÒª¼ÓÃÜ
+		//ï¿½Í»ï¿½ï¿½Ë°ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½
 		sg_mycryto.Reset();
 		for (uint32_t i = MSGLEN_TEXT_POS; i<u.GetLen(); ++i)
 		{

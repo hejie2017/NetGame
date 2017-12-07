@@ -12,76 +12,75 @@ namespace mogo
 
 	enum MSGID_ENUM_TYPE
 	{
-	//·þÎñÆ÷·¢¸ø¿Í»§¶ËµÄ°ü
-	MSGID_CLIENT_LOGIN_RESP = 1,                                  //·þÎñÆ÷·¢¸ø¿Í»§¶ËµÄÕËºÅµÇÂ¼½á¹û
-	MSGID_CLIENT_NOTIFY_ATTACH_BASEAPP = 2,                                  //Á¬½ÓbaseappÍ¨Öª
-	MSGID_CLIENT_ENTITY_ATTACHED = 3,                                  //Í¨Öª¿Í»§¶ËÒÑ¾­attachµ½Ò»¸ö·þÎñÆ÷entity,Í¬Ê±Ë¢Êý¾Ý
-	MSGID_CLIENT_AVATAR_ATTRI_SYNC = 4,                                  //AVATARÏà¹ØÊôÐÔÐÞ¸ÄÍ¬²½
-	MSGID_CLIENT_RPC_RESP = 5,                                  //·þÎñÆ÷·¢¸ø¿Í»§¶ËµÄrpc
-	MSGID_CLIENT_ENTITY_POS_SYNC = 6,                                  //·þÎñÆ÷¸æËß¿Í»§¶Ë×ø±ê±ä»¯(move)
-	//MSGID_CLIENT_ENTITY_SPACE_CHANGE        = 7,                                  //·þÎñÆ÷¸æËß¿Í»§¶Ë³¡¾°±ä»¯
-	MSGID_CLIENT_AOI_ENTITIES = 8,                                  //·þÎñÆ÷¸æËß¿Í»§¶Ëaoi·¶Î§ÄÚµÄentity
-	MSGID_CLIENT_AOI_NEW_ENTITY = 9,                                  //·þÎñÆ÷¸æËß¿Í»§¶Ëaoi·¶Î§ÄÚÐÂÔöµÄentity
-	MSGID_CLIENT_ENTITY_CELL_ATTACHED = 10,                                 //·þÎñÆ÷´ò°ü¸ø¿Í»§¶ËµÄcell_clientÊôÐÔ
-	MSGID_CLIENT_OTHER_ENTITY_ATTRI_SYNC = 11,                                 //ÆäËûentityÊôÐÔ±ä»¯Í¬²½
-	MSGID_CLIENT_OTHER_ENTITY_POS_SYNC = 12,                                 //ÆäËûentity×ø±ê±ä»¯Í¬²½(move)
-	MSGID_CLIENT_OTHER_ENTITY_MOVE_REQ = 13,                                 //·þÎñÆ÷×ª·¢µÄÆäËûentityµÄÒÆ¶¯ÇëÇó
-	//MSGID_CLIENT_OTHER_RPC_RESP             = 14,                                 //¶ÔÆäËû¿Í»§¶ËentityµÄrpc
-	MSGID_CLIENT_AOI_DEL_ENTITY = 15,                                 //ÓÐentityÀë¿ªÁËaoi
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í»ï¿½ï¿½ËµÄ°ï¿½
+	MSGID_CLIENT_LOGIN_RESP = 1,                                  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í»ï¿½ï¿½Ëµï¿½ï¿½ËºÅµï¿½Â¼ï¿½ï¿½ï¿½
+	MSGID_CLIENT_NOTIFY_ATTACH_BASEAPP = 2,                                  //ï¿½ï¿½ï¿½ï¿½baseappÍ¨Öª
+	MSGID_CLIENT_ENTITY_ATTACHED = 3,                                  //Í¨Öªï¿½Í»ï¿½ï¿½ï¿½ï¿½Ñ¾ï¿½attachï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½entity,Í¬Ê±Ë¢ï¿½ï¿½ï¿½ï¿½
+	MSGID_CLIENT_AVATAR_ATTRI_SYNC = 4,                                  //AVATARï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Þ¸ï¿½Í¬ï¿½ï¿½
+	MSGID_CLIENT_RPC_RESP = 5,                                  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í»ï¿½ï¿½Ëµï¿½rpc
+	MSGID_CLIENT_ENTITY_POS_SYNC = 6,                                  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß¿Í»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ä»¯(move)
+	//MSGID_CLIENT_ENTITY_SPACE_CHANGE        = 7,                                  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß¿Í»ï¿½ï¿½Ë³ï¿½ï¿½ï¿½ï¿½ä»¯
+	MSGID_CLIENT_AOI_ENTITIES = 8,                                  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß¿Í»ï¿½ï¿½ï¿½aoiï¿½ï¿½Î§ï¿½Úµï¿½entity
+	MSGID_CLIENT_AOI_NEW_ENTITY = 9,                                  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß¿Í»ï¿½ï¿½ï¿½aoiï¿½ï¿½Î§ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½entity
+	MSGID_CLIENT_ENTITY_CELL_ATTACHED = 10,                                 //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í»ï¿½ï¿½Ëµï¿½cell_clientï¿½ï¿½ï¿½ï¿½
+	MSGID_CLIENT_OTHER_ENTITY_ATTRI_SYNC = 11,                                 //ï¿½ï¿½ï¿½ï¿½entityï¿½ï¿½ï¿½Ô±ä»¯Í¬ï¿½ï¿½
+	MSGID_CLIENT_OTHER_ENTITY_POS_SYNC = 12,                                 //ï¿½ï¿½ï¿½ï¿½entityï¿½ï¿½ï¿½ï¿½ä»¯Í¬ï¿½ï¿½(move)
+	MSGID_CLIENT_OTHER_ENTITY_MOVE_REQ = 13,                                 //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½entityï¿½ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½ï¿½
+	//MSGID_CLIENT_OTHER_RPC_RESP             = 14,                                 //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í»ï¿½ï¿½ï¿½entityï¿½ï¿½rpc
+	MSGID_CLIENT_AOI_DEL_ENTITY = 15,                                 //ï¿½ï¿½entityï¿½ë¿ªï¿½ï¿½aoi
 
-	MSGID_CLIENT_ENTITY_POS_PULL = 16,                                 //·þÎñÆ÷¸æËß¿Í»§¶Ë×ø±ê±ä»¯(À­³¶)
-	MSGID_CLIENT_OTHER_ENTITY_POS_PULL = 17,                                 //·þÎñÆ÷×ª·¢µÄÆäËûentityµÄÒÆ¶¯ÇëÇó(À­³¶)
-	MSGID_CLIENT_ENTITY_POS_TELEPORT = 18,                                 //·þÎñÆ÷¸æËß¿Í»§¶Ë×ø±ê±ä»¯(teleport)
-	MSGID_CLIENT_OTHER_ENTITY_TELEPORT = 19,                                 //·þÎñÆ÷×ª·¢µÄÆäËûentityµÄÒÆ¶¯ÇëÇó(teleport)
+	MSGID_CLIENT_ENTITY_POS_PULL = 16,                                 //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß¿Í»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ä»¯(ï¿½ï¿½ï¿½ï¿½)
+	MSGID_CLIENT_OTHER_ENTITY_POS_PULL = 17,                                 //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½entityï¿½ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½)
+	MSGID_CLIENT_ENTITY_POS_TELEPORT = 18,                                 //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß¿Í»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ä»¯(teleport)
+	MSGID_CLIENT_OTHER_ENTITY_TELEPORT = 19,                                 //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½entityï¿½ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½ï¿½(teleport)
 	MSGID_CLIENT_CHECK_RESP = 20,
 
 	#ifdef __RELOGIN
-	MSGID_CLIENT_RELOGIN_KEY_NOT_EXIT = 21,                                 //¶ÏÏßÖØÁ¬Ê±£¬·þÎñÆ÷Í¨Öª¿Í»§¶ËkeyÒÑ¾­²»´æÔÚ
+	MSGID_CLIENT_RELOGIN_KEY_NOT_EXIT = 21,                                 //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¨Öªï¿½Í»ï¿½ï¿½ï¿½keyï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	#endif
-	MSGID_CLIENT_NOTIFY_MULTILOGIN = 22,                                 //·þÎñÆ÷Í¨ÖªÐÂµÄ¿Í»§¶Ë¶Ï¿ªÁ¬½Ó
+	MSGID_CLIENT_NOTIFY_MULTILOGIN = 22,                                 //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¨Öªï¿½ÂµÄ¿Í»ï¿½ï¿½Ë¶Ï¿ï¿½ï¿½ï¿½ï¿½ï¿½
 
 
-	//¿Í»§¶Ë·¢¸ø·þÎñÆ÷µÄ°ü
-	MSGID_LOGINAPP_CHECK = 30,                                 //¿Í»§¶Ë°æ±¾Ð£Ñé
-	MSGID_LOGINAPP_LOGIN = 31,                                 //¿Í»§¶ËÊäÈëÕÊ»§Ãû/ÃÜÂë½øÐÐµÇÂ¼ÑéÖ¤
+	//ï¿½Í»ï¿½ï¿½Ë·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä°ï¿½
+	MSGID_LOGINAPP_CHECK = 30,                                 //ï¿½Í»ï¿½ï¿½Ë°æ±¾Ð£ï¿½ï¿½
+	MSGID_LOGINAPP_LOGIN = 31,                                 //ï¿½Í»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê»ï¿½ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ðµï¿½Â¼ï¿½ï¿½Ö¤
 	MSGID_BASEAPP_CLIENT_LOGIN = 32,
-	MSGID_BASEAPP_CLIENT_RPCALL = 33,                                 //¿Í»§¶Ë·¢ÆðµÄÔ¶³Ìµ÷ÓÃ
-	MSGID_BASEAPP_CLIENT_MOVE_REQ = 34,                                 //¿Í»§¶Ë·¢ÆðµÄÒÆ¶¯
-	MSGID_BASEAPP_CLIENT_RPC2CELL_VIA_BASE = 35,                                 //¿Í»§¶Ë·¢ÆðµÄ(Í¾¾­baseµÄ)cell·½·¨µ÷ÓÃ
-	MSGID_BASEAPP_CLIENT_OTHERS_MOVE_REQ = 36,                                 //¿Í»§¶Ë·¢ÆðµÄÆäËûentityµÄÒÆ¶¯(³èÎï¡¢¹ÍÓ¶±øµÈ)
+	MSGID_BASEAPP_CLIENT_RPCALL = 33,                                 //ï¿½Í»ï¿½ï¿½Ë·ï¿½ï¿½ï¿½ï¿½Ô¶ï¿½Ìµï¿½ï¿½ï¿½
+	MSGID_BASEAPP_CLIENT_MOVE_REQ = 34,                                 //ï¿½Í»ï¿½ï¿½Ë·ï¿½ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½
+	MSGID_BASEAPP_CLIENT_RPC2CELL_VIA_BASE = 35,                                 //ï¿½Í»ï¿½ï¿½Ë·ï¿½ï¿½ï¿½ï¿½(Í¾ï¿½ï¿½baseï¿½ï¿½)cellï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	MSGID_BASEAPP_CLIENT_OTHERS_MOVE_REQ = 36,                                 //ï¿½Í»ï¿½ï¿½Ë·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½entityï¿½ï¿½ï¿½Æ¶ï¿½(ï¿½ï¿½ï¿½ï¡¢ï¿½ï¿½Ó¶ï¿½ï¿½ï¿½ï¿½)
 
-	#ifdef __RELOGIN
-	MSGID_BASEAPP_CLIENT_RELOGIN = 37,                                 //¿Í»§¶Ë¶ÏÏßÖØÁ¬
-	#endif
 
-	//ÔÝ¶¨50ÒÔÏÂµÄÊÇ¿Í»§¶ËºÍ·þÎñÆ÷µÄ½»»¥°ü,ÐèÒª¼ÓÃÜ
+	MSGID_BASEAPP_CLIENT_RELOGIN = 37,                                 //ï¿½Í»ï¿½ï¿½Ë¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+
+	//ï¿½Ý¶ï¿½50ï¿½ï¿½ï¿½Âµï¿½ï¿½Ç¿Í»ï¿½ï¿½ËºÍ·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä½ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½
 	MAX_CLIENT_SERVER_MSGID = 50,
 
-	MSGID_ALLAPP_ONTICK = 101,                                //ÐÄÌøÏûÏ¢
-	MSGID_ALLAPP_SETTIME = 102,                                //Í¬²½Ê±¼äÏûÏ¢
-	MSGID_ALLAPP_SHUTDOWN_SERVER = 103,                                //¹Ø±Õ·þÎñÆ÷Í¨Öª
+	MSGID_ALLAPP_ONTICK = 101,                                //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
+	MSGID_ALLAPP_SETTIME = 102,                                //Í¬ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½Ï¢
+	MSGID_ALLAPP_SHUTDOWN_SERVER = 103,                                //ï¿½Ø±Õ·ï¿½ï¿½ï¿½ï¿½ï¿½Í¨Öª
 
-	//MSGID_LOGINAPP_LOGIN                    = MSGTYPE_LOGINAPP + 1,             //¿Í»§¶ËÊäÈëÕÊ»§Ãû/ÃÜÂë½øÐÐµÇÂ¼ÑéÖ¤
-	MSGID_LOGINAPP_MODIFY_LOGIN_FLAG = MSGTYPE_LOGINAPP + 6,               //ÐÞ¸Ä·þÎñÆ÷ÊÇ·ñ¿ÉÒÔµÇÂ¼±ê¼Ç
+	//MSGID_LOGINAPP_LOGIN                    = MSGTYPE_LOGINAPP + 1,             //ï¿½Í»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê»ï¿½ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ðµï¿½Â¼ï¿½ï¿½Ö¤
+	MSGID_LOGINAPP_MODIFY_LOGIN_FLAG = MSGTYPE_LOGINAPP + 6,               //ï¿½Þ¸Ä·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½Ôµï¿½Â¼ï¿½ï¿½ï¿½
 	MSGID_LOGINAPP_SELECT_ACCOUNT_CALLBACK = MSGTYPE_LOGINAPP + 7,
 	MSGID_LOGINAPP_NOTIFY_CLIENT_TO_ATTACH = MSGTYPE_LOGINAPP + 8,
-	MSGID_LOGINAPP_FORBIDLOGIN = MSGTYPE_LOGINAPP + 9,               //½ûÖ¹µÇÂ½
-	MSGID_LOGINAPP_MODIFY_ONLINE_COUNT = MSGTYPE_LOGINAPP + 10,              //ÐÞ¸Ä·þÎñÆ÷µ±Ç°ÔÚÏßÈËÊý
-	MSGID_LOGINAPP_LOGIN_VERIFY_CALLBACK = MSGTYPE_LOGINAPP + 11,              //sdk·þÎñÆ÷ÑéÖ¤·µ»Ø
-	MSGID_LOGINAPP_FORBID_IP_UNTIL_TIME = MSGTYPE_LOGINAPP + 12,               //½ûÖ¹ipµÇÂ½µ½½ØÖ¹Ê±¼ä
-	MSGID_LOGINAPP_FORBID_ACCOUNT_UNTIL_TIME = MSGTYPE_LOGINAPP + 13,               //½ûÖ¹ÕËºÅµÇÂ½µ½½ØÖ¹Ê±¼ä
-	MSGID_LOGINAPP_NOTIFY_CLIENT_MULTILOGIN = MSGTYPE_LOGINAPP + 14,               //Í¨ÖªÐÂµÄ¿Í»§¶Ë¶Ï¿ªÁ¬½Ó
-	MSGID_LOGINAPP_WEBLOGIN = MSGTYPE_LOGINAPP + 15,               //À´×Ô×Ô´øweb·þÎñÆ÷µÄµÇÂ½
+	MSGID_LOGINAPP_FORBIDLOGIN = MSGTYPE_LOGINAPP + 9,               //ï¿½ï¿½Ö¹ï¿½ï¿½Â½
+	MSGID_LOGINAPP_MODIFY_ONLINE_COUNT = MSGTYPE_LOGINAPP + 10,              //ï¿½Þ¸Ä·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	MSGID_LOGINAPP_LOGIN_VERIFY_CALLBACK = MSGTYPE_LOGINAPP + 11,              //sdkï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¤ï¿½ï¿½ï¿½ï¿½
+	MSGID_LOGINAPP_FORBID_IP_UNTIL_TIME = MSGTYPE_LOGINAPP + 12,               //ï¿½ï¿½Ö¹ipï¿½ï¿½Â½ï¿½ï¿½ï¿½ï¿½Ö¹Ê±ï¿½ï¿½
+	MSGID_LOGINAPP_FORBID_ACCOUNT_UNTIL_TIME = MSGTYPE_LOGINAPP + 13,               //ï¿½ï¿½Ö¹ï¿½ËºÅµï¿½Â½ï¿½ï¿½ï¿½ï¿½Ö¹Ê±ï¿½ï¿½
+	MSGID_LOGINAPP_NOTIFY_CLIENT_MULTILOGIN = MSGTYPE_LOGINAPP + 14,               //Í¨Öªï¿½ÂµÄ¿Í»ï¿½ï¿½Ë¶Ï¿ï¿½ï¿½ï¿½ï¿½ï¿½
+	MSGID_LOGINAPP_WEBLOGIN = MSGTYPE_LOGINAPP + 15,               //ï¿½ï¿½ï¿½ï¿½ï¿½Ô´ï¿½webï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Äµï¿½Â½
 
 	MSGID_BASEAPPMGR_REGISTERGLOBALLY = MSGTYPE_BASEAPPMGR + 1,
 	MSGID_BASEAPPMGR_CREATEBASE_ANYWHERE = MSGTYPE_BASEAPPMGR + 2,               //
 	MSGID_BASEAPPMGR_CREATEBASE_FROM_DBID_ANYWHERE = MSGTYPE_BASEAPPMGR + 3,        //
 	MSGID_BASEAPPMGR_CREATEBASE_FROM_NAME_ANYWHERE = MSGTYPE_BASEAPPMGR + 4,        //
 	MSGID_BASEAPPMGR_CREATE_CELL_IN_NEW_SPACE = MSGTYPE_BASEAPPMGR + 5,        //
-	MSGID_BASEAPPMGR_SHUTDOWN_SERVERS = MSGTYPE_BASEAPPMGR + 6,               //Í£Ö¹·þÎñÆ÷
-	MSGID_BASEAPPMGR_ON_SERVER_SHUTDOWN = MSGTYPE_BASEAPPMGR + 7,               //Ä³¸ö·þÎñÆ÷½ø³ÌÍ£Ö¹ºóµÄ»Øµ÷·½·¨
+	MSGID_BASEAPPMGR_SHUTDOWN_SERVERS = MSGTYPE_BASEAPPMGR + 6,               //Í£Ö¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	MSGID_BASEAPPMGR_ON_SERVER_SHUTDOWN = MSGTYPE_BASEAPPMGR + 7,               //Ä³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í£Ö¹ï¿½ï¿½Ä»Øµï¿½ï¿½ï¿½ï¿½ï¿½
 	MSGID_BASEAPPMGR_CREATEBASE_FROM_NAME = MSGTYPE_BASEAPPMGR + 8,               //
-	MSGID_BASEAPPMGR_SHUTDOWN_SERVERS_CALLBACK = MSGTYPE_BASEAPPMGR + 9,            //¹Ø±Õ·þÎñÆ÷µÄ»ØÓ¦
+	MSGID_BASEAPPMGR_SHUTDOWN_SERVERS_CALLBACK = MSGTYPE_BASEAPPMGR + 9,            //ï¿½Ø±Õ·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä»ï¿½Ó¦
 
 	MSGID_BASEAPP_REGISTERGLOBALLY_CALLBACK = MSGTYPE_BASEAPP + 1,
 	MSGID_BASEAPP_ADD_GLOBALBASE = MSGTYPE_BASEAPP + 2,
@@ -90,37 +89,37 @@ namespace mogo
 	MSGID_BASEAPP_SELECT_ENTITY_CALLBACK = MSGTYPE_BASEAPP + 5,
 	MSGID_BASEAPP_UPDATE_ENTITY_CALLBACK = MSGTYPE_BASEAPP + 6,
 	MSGID_BASEAPP_LOOKUP_ENTITY_CALLBACK = MSGTYPE_BASEAPP + 7,
-	MSGID_BASEAPP_ENTITY_MULTILOGIN = MSGTYPE_BASEAPP + 8,                //¶à¸ö¿Í»§¶ËµÇÂ¼µ½Ò»¸öentity
-	MSGID_BASEAPP_LOAD_ALL_AVATAR = MSGTYPE_BASEAPP + 9,                //½Å±¾·¢ÆðµÄloadËùÓÐAvatar
+	MSGID_BASEAPP_ENTITY_MULTILOGIN = MSGTYPE_BASEAPP + 8,                //ï¿½ï¿½ï¿½ï¿½Í»ï¿½ï¿½Ëµï¿½Â¼ï¿½ï¿½Ò»ï¿½ï¿½entity
+	MSGID_BASEAPP_LOAD_ALL_AVATAR = MSGTYPE_BASEAPP + 9,                //ï¿½Å±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½loadï¿½ï¿½ï¿½ï¿½Avatar
 	MSGID_BASEAPP_ON_GET_CELL = MSGTYPE_BASEAPP + 10,               //get cell
-	MSGID_BASEAPP_CREATE_CELL_VIA_MYCELL = MSGTYPE_BASEAPP + 11,               //Í¨¹ýÒ»¸öÓÐcellµÄbaseÀ´´´½¨ÁíÍâÒ»¸öbaseµÄcell
-	MSGID_BASEAPP_CREATE_CELL_FAILED = MSGTYPE_BASEAPP + 12,               //´´½¨cellÊ§°ÜµÄ»Øµ÷·½·¨
-	MSGID_BASEAPP_LOAD_ENTITIES_OF_TYPE = MSGTYPE_BASEAPP + 13,               //½Å±¾·¢ÆðµÄloadÒ»¸öÀàÐÍµÄËùÓÐentity
-	MSGID_BASEAPP_LOAD_ENTITIES_END_MSG = MSGTYPE_BASEAPP + 14,               //load entitiesµÄ½áÊøÏûÏ¢°ü
-	MSGID_BASEAPP_ON_LOSE_CELL = MSGTYPE_BASEAPP + 15,               //cell destroyÖ®ºóµÄ»Øµ÷·½·¨
+	MSGID_BASEAPP_CREATE_CELL_VIA_MYCELL = MSGTYPE_BASEAPP + 11,               //Í¨ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½cellï¿½ï¿½baseï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½baseï¿½ï¿½cell
+	MSGID_BASEAPP_CREATE_CELL_FAILED = MSGTYPE_BASEAPP + 12,               //ï¿½ï¿½ï¿½ï¿½cellÊ§ï¿½ÜµÄ»Øµï¿½ï¿½ï¿½ï¿½ï¿½
+	MSGID_BASEAPP_LOAD_ENTITIES_OF_TYPE = MSGTYPE_BASEAPP + 13,               //ï¿½Å±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½loadÒ»ï¿½ï¿½ï¿½ï¿½ï¿½Íµï¿½ï¿½ï¿½ï¿½ï¿½entity
+	MSGID_BASEAPP_LOAD_ENTITIES_END_MSG = MSGTYPE_BASEAPP + 14,               //load entitiesï¿½Ä½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½
+	MSGID_BASEAPP_ON_LOSE_CELL = MSGTYPE_BASEAPP + 15,               //cell destroyÖ®ï¿½ï¿½Ä»Øµï¿½ï¿½ï¿½ï¿½ï¿½
 	MSGID_BASEAPP_CREATE_BASE_ANYWHERE = MSGTYPE_BASEAPP + 16,               //
-	MSGID_BASEAPP_SET_BASE_DATA = MSGTYPE_BASEAPP + 17,               //ÉèÖÃÈ«baseÊý¾Ý
-	MSGID_BASEAPP_DEL_BASE_DATA = MSGTYPE_BASEAPP + 18,               //É¾³ýÈ«baseÊý¾Ý
-	MSGID_BASEAPP_ON_REDIS_HASH_LOAD = MSGTYPE_BASEAPP + 19,               //redis_hashÊý¾ÝloadÖ®ºóµÄ»Øµ÷·½·¨
-	MSGID_BASEAPP_CELL_ATTRI_SYNC = MSGTYPE_BASEAPP + 20,               //cell_and_clientÊôÐÔÍ¨¹ýbaseÍ¬²½¸ø¿Í»§¶Ë
-	MSGID_BASEAPP_AVATAR_POS_SYNC = MSGTYPE_BASEAPP + 21,               //avatar×Ô¼ºÔÚcellÉÏµÄ×ø±êÍ¬²½¸øbase
-	MSGID_BASEAPP_DEL_ACCOUNT_CACHE_CALLBACK = MSGTYPE_BASEAPP + 22,               //Í¨ÖªbasedbmgrÉÏµÄaccount»º´æÒÑ¾­É¾³ý
+	MSGID_BASEAPP_SET_BASE_DATA = MSGTYPE_BASEAPP + 17,               //ï¿½ï¿½ï¿½ï¿½È«baseï¿½ï¿½ï¿½ï¿½
+	MSGID_BASEAPP_DEL_BASE_DATA = MSGTYPE_BASEAPP + 18,               //É¾ï¿½ï¿½È«baseï¿½ï¿½ï¿½ï¿½
+	MSGID_BASEAPP_ON_REDIS_HASH_LOAD = MSGTYPE_BASEAPP + 19,               //redis_hashï¿½ï¿½ï¿½ï¿½loadÖ®ï¿½ï¿½Ä»Øµï¿½ï¿½ï¿½ï¿½ï¿½
+	MSGID_BASEAPP_CELL_ATTRI_SYNC = MSGTYPE_BASEAPP + 20,               //cell_and_clientï¿½ï¿½ï¿½ï¿½Í¨ï¿½ï¿½baseÍ¬ï¿½ï¿½ï¿½ï¿½ï¿½Í»ï¿½ï¿½ï¿½
+	MSGID_BASEAPP_AVATAR_POS_SYNC = MSGTYPE_BASEAPP + 21,               //avatarï¿½Ô¼ï¿½ï¿½ï¿½cellï¿½Ïµï¿½ï¿½ï¿½ï¿½ï¿½Í¬ï¿½ï¿½ï¿½ï¿½base
+	MSGID_BASEAPP_DEL_ACCOUNT_CACHE_CALLBACK = MSGTYPE_BASEAPP + 22,               //Í¨Öªbasedbmgrï¿½Ïµï¿½accountï¿½ï¿½ï¿½ï¿½ï¿½Ñ¾ï¿½É¾ï¿½ï¿½
 
-	MSGID_BASEAPP_ENTITY_RPC = MSGTYPE_BASEAPP + 80,               //·þÎñÆ÷¶Ë½ø³Ì·¢ÆðµÄ»ùÓÚentityµÄrpc
-	MSGID_BASEAPP_LUA_DEBUG = MSGTYPE_BASEAPP + 90,               //µ÷ÊÔlua½Å±¾
+	MSGID_BASEAPP_ENTITY_RPC = MSGTYPE_BASEAPP + 80,               //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë½ï¿½ï¿½Ì·ï¿½ï¿½ï¿½Ä»ï¿½ï¿½ï¿½entityï¿½ï¿½rpc
+	MSGID_BASEAPP_LUA_DEBUG = MSGTYPE_BASEAPP + 90,               //ï¿½ï¿½ï¿½ï¿½luaï¿½Å±ï¿½
 	MSGID_BASEAPP_ENTITY_ATTRI_SYNC = MSGTYPE_BASEAPP + 91,
-	MSGID_BASEAPP_CLIENT_RPC_VIA_BASE = MSGTYPE_BASEAPP + 92,               //Í¨¹ýbase×ª·¢µÄclient rpcµ÷ÓÃ
-	MSGID_BASEAPP_TIME_SAVE = MSGTYPE_BASEAPP + 93,               //¶¨Ê±´æÅÌ
-	MSGID_BASEAPP_CLIENT_MSG_VIA_BASE = MSGTYPE_BASEAPP + 94,               //Í¨¹ýbase×ª·¢µÄclientÏûÏ¢°ü,×¢ÒâÓë92µÄÇø±ð
-	MSGID_BASEAPP_ITEMS_LOADING_CALLBACK = MSGTYPE_BASEAPP + 95,               //Ö¸¶¨avatar±³°üÊý¾Ý×°ÔØ»Øµ÷ÇëÇó
-	MSGID_BASEAPP_UPDATE_ITEMS_CALLBACK = MSGTYPE_BASEAPP + 96,               //udpate items data »Øµ÷ÇëÇó
-	MSGID_BASEAPP_TABLE_SELECT_CALLBACK = MSGTYPE_BASEAPP + 97,               //TableSelectµÄ»Øµ÷
-	MSGID_BASEAPP_BROADCAST_CLIENT_PRC = MSGTYPE_BASEAPP + 98,               //È«·þ¹ã²¥µÄclient rpcµ÷ÓÃ
-	MSGID_BASEAPP_TABLE_UPDATE_BATCH_CB = MSGTYPE_BASEAPP + 99,               //TableUpdateBatchµÄ»Øµ÷
-	MSGID_BASEAPP_TABLE_INSERT_CALLBACK = MSGTYPE_BASEAPP + 100,              //TableInsertµÄ»Øµ÷
+	MSGID_BASEAPP_CLIENT_RPC_VIA_BASE = MSGTYPE_BASEAPP + 92,               //Í¨ï¿½ï¿½base×ªï¿½ï¿½ï¿½ï¿½client rpcï¿½ï¿½ï¿½ï¿½
+	MSGID_BASEAPP_TIME_SAVE = MSGTYPE_BASEAPP + 93,               //ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½
+	MSGID_BASEAPP_CLIENT_MSG_VIA_BASE = MSGTYPE_BASEAPP + 94,               //Í¨ï¿½ï¿½base×ªï¿½ï¿½ï¿½ï¿½clientï¿½ï¿½Ï¢ï¿½ï¿½,×¢ï¿½ï¿½ï¿½ï¿½92ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	MSGID_BASEAPP_ITEMS_LOADING_CALLBACK = MSGTYPE_BASEAPP + 95,               //Ö¸ï¿½ï¿½avatarï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×°ï¿½Ø»Øµï¿½ï¿½ï¿½ï¿½ï¿½
+	MSGID_BASEAPP_UPDATE_ITEMS_CALLBACK = MSGTYPE_BASEAPP + 96,               //udpate items data ï¿½Øµï¿½ï¿½ï¿½ï¿½ï¿½
+	MSGID_BASEAPP_TABLE_SELECT_CALLBACK = MSGTYPE_BASEAPP + 97,               //TableSelectï¿½Ä»Øµï¿½
+	MSGID_BASEAPP_BROADCAST_CLIENT_PRC = MSGTYPE_BASEAPP + 98,               //È«ï¿½ï¿½ï¿½ã²¥ï¿½ï¿½client rpcï¿½ï¿½ï¿½ï¿½
+	MSGID_BASEAPP_TABLE_UPDATE_BATCH_CB = MSGTYPE_BASEAPP + 99,               //TableUpdateBatchï¿½Ä»Øµï¿½
+	MSGID_BASEAPP_TABLE_INSERT_CALLBACK = MSGTYPE_BASEAPP + 100,              //TableInsertï¿½Ä»Øµï¿½
 	//MSGID_BASEAPP_CLIENT_LOGIN              = MSGTYPE_BASEAPP + 100,
-	//MSGID_BASEAPP_CLIENT_RPCALL             = MSGTYPE_BASEAPP + 101,              //¿Í»§¶Ë·¢ÆðµÄÔ¶³Ìµ÷ÓÃ
-	MSGID_BASEAPP_TABLE_EXCUTE_CALLBACK = MSGTYPE_BASEAPP + 102,              //TableInsertµÄ»Øµ÷
+	//MSGID_BASEAPP_CLIENT_RPCALL             = MSGTYPE_BASEAPP + 101,              //ï¿½Í»ï¿½ï¿½Ë·ï¿½ï¿½ï¿½ï¿½Ô¶ï¿½Ìµï¿½ï¿½ï¿½
+	MSGID_BASEAPP_TABLE_EXCUTE_CALLBACK = MSGTYPE_BASEAPP + 102,              //TableInsertï¿½Ä»Øµï¿½
 	MSGID_BASEAPP_INSERT_ITEMS_CALLBACK = MSGTYPE_BASEAPP + 103,              //insert item call back
 	MSGID_BASEAPP_CROSSCLIENT_BROADCAST = MSGTYPE_BASEAPP + 104,                //broadcast from crossserver
 	MSGID_BASEAPP_TABLE2EXCUTE_RESP = MSGTYPE_BASEAPP + 105,
@@ -131,16 +130,16 @@ namespace mogo
 	MSGID_CELLAPP_ENTITY_RPC = MSGTYPE_CELLAPP + 2,
 	MSGID_CELLAPP_CREATE_CELL_VIA_MYCELL = MSGTYPE_CELLAPP + 3,
 	MSGID_CELLAPP_DESTROY_CELLENTITY = MSGTYPE_CELLAPP + 4,
-	MSGID_CELLAPP_PICKLE_CLIENT_ATTRIS = MSGTYPE_CELLAPP + 5,                //BASEÍ¨Öªcell´ò°üËùÓÐclientÊôÐÔ
-	MSGID_CELLAPP_PICKLE_AOI_ENTITIES = MSGTYPE_CELLAPP + 6,                //baseÍ¨Öªcell´ò°üaoiÄÚËùÓÐentity
-	MSGID_CELLAPP_CLIENT_MOVE_REQ = MSGTYPE_CELLAPP + 7,                //¿Í»§¶Ë·¢ÆðµÄÒÆ¶¯
+	MSGID_CELLAPP_PICKLE_CLIENT_ATTRIS = MSGTYPE_CELLAPP + 5,                //BASEÍ¨Öªcellï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½clientï¿½ï¿½ï¿½ï¿½
+	MSGID_CELLAPP_PICKLE_AOI_ENTITIES = MSGTYPE_CELLAPP + 6,                //baseÍ¨Öªcellï¿½ï¿½ï¿½aoiï¿½ï¿½ï¿½ï¿½ï¿½ï¿½entity
+	MSGID_CELLAPP_CLIENT_MOVE_REQ = MSGTYPE_CELLAPP + 7,                //ï¿½Í»ï¿½ï¿½Ë·ï¿½ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½
 	MSGID_CELLAPP_LOSE_CLIENT = MSGTYPE_CELLAPP + 8,
 	MSGID_CELLAPP_ON_TIME_MOVE = MSGTYPE_CELLAPP + 9,                //entity time move
 	MSGID_CELLAPP_SET_VISIABLE = MSGTYPE_CELLAPP + 10,               //
-	MSGID_CELLAPP_CLIENT_OTHERS_MOVE_REQ = MSGTYPE_CELLAPP + 11,               //¿Í»§¶Ë·¢ÆðµÄÆäËûÊµÌåÒÆ¶¯(³èÎï¡¢¹ÍÓ¶±øµÈ)
+	MSGID_CELLAPP_CLIENT_OTHERS_MOVE_REQ = MSGTYPE_CELLAPP + 11,               //ï¿½Í»ï¿½ï¿½Ë·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Êµï¿½ï¿½ï¿½Æ¶ï¿½(ï¿½ï¿½ï¿½ï¡¢ï¿½ï¿½Ó¶ï¿½ï¿½ï¿½ï¿½)
 
 
-	MSGID_CELLAPP_LUA_DEBUG = MSGTYPE_CELLAPP + 90,               //µ÷ÊÔlua½Å±¾
+	MSGID_CELLAPP_LUA_DEBUG = MSGTYPE_CELLAPP + 90,               //ï¿½ï¿½ï¿½ï¿½luaï¿½Å±ï¿½
 	MSGID_CELLAPP_ENTITY_ATTRI_SYNC = MSGTYPE_CELLAPP + 91,
 
 
@@ -149,9 +148,9 @@ namespace mogo
 	MSGID_DBMGR_DELETE_ENTITY = MSGTYPE_DBMGR + 3,
 	MSGID_DBMGR_SELECT_ENTITY = MSGTYPE_DBMGR + 4,
 	MSGID_DBMGR_SELECT_ACCOUNT = MSGTYPE_DBMGR + 5,
-	MSGID_DBMGR_RAW_SELECT = MSGTYPE_DBMGR + 6,                    //Ö¸¶¨sqlÓï¾äµÄselect
-	MSGID_DBMGR_RAW_MODIFY = MSGTYPE_DBMGR + 7,                    //Ö¸¶¨sqlÓï¾äµÄDELETE/UPDATEµÈ
-	MSGID_DBMGR_RAW_MODIFY_NORESP = MSGTYPE_DBMGR + 8,                    //(²»ÐèÒª·µ»Ø½á¹û)Ö¸¶¨sqlÓï¾äµÄDELETE/UPDATEµÈ
+	MSGID_DBMGR_RAW_SELECT = MSGTYPE_DBMGR + 6,                    //Ö¸ï¿½ï¿½sqlï¿½ï¿½ï¿½ï¿½select
+	MSGID_DBMGR_RAW_MODIFY = MSGTYPE_DBMGR + 7,                    //Ö¸ï¿½ï¿½sqlï¿½ï¿½ï¿½ï¿½DELETE/UPDATEï¿½ï¿½
+	MSGID_DBMGR_RAW_MODIFY_NORESP = MSGTYPE_DBMGR + 8,                    //(ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½Ø½ï¿½ï¿½)Ö¸ï¿½ï¿½sqlï¿½ï¿½ï¿½ï¿½DELETE/UPDATEï¿½ï¿½
 	MSGID_DBMGR_CREATEBASE = MSGTYPE_DBMGR + 9,                    //
 	MSGID_DBMGR_CREATEBASE_FROM_DBID = MSGTYPE_DBMGR + 10,                   //
 	MSGID_DBMGR_CREATEBASE_FROM_NAME = MSGTYPE_DBMGR + 11,                   //
@@ -162,29 +161,29 @@ namespace mogo
 	MSGID_DBMGR_REDIS_HASH_SET = MSGTYPE_DBMGR + 16,
 	MSGID_DBMGR_REDIS_HASH_DEL = MSGTYPE_DBMGR + 17,
 	MSGID_DBMGR_UPDATE_ENTITY_REDIS = MSGTYPE_DBMGR + 18,
-	MSGID_DBMGR_DEL_ACCOUNT_CACHE = MSGTYPE_DBMGR + 19,                   //É¾³ýÕËºÅ»º´æ£º²éÕÒÐÅÏ¢
-	MSGID_DBMGR_UPDATE_ITEMS = MSGTYPE_DBMGR + 20,                   //±³°üµÀ¾ßÊý¾Ý¸üÐÂ
-	MSGID_DBMGR_LOADING_ITEMS = MSGTYPE_DBMGR + 21,                   //±³°üÊý¾Ý×°ÔØ
-	MSGID_DBMGR_TABLE_SELECT = MSGTYPE_DBMGR + 22,                   //²éÑ¯Ä³ÕÅ±í
-	MSGID_DBMGR_UPDATE_BATCH = MSGTYPE_DBMGR + 23,                   //¸ù¾ÝÄ³¸ö×Ö¶ÎÅúÁ¿¸üÐÂ±íÊý¾Ý
-	MSGID_DBMGR_TABLE_INSERT = MSGTYPE_DBMGR + 24,                   //²åÈëÄ³ÕÅ±í
-	MSGID_DBMGR_TABLE_EXCUTE = MSGTYPE_DBMGR + 25,                   //Ö´ÐÐÄ³¸ösql
-	MSGID_DBMGR_INCREMENTAL_UPDATE_ITEMS = MSGTYPE_DBMGR + 26,                   //Ö´ÐÐµÀ¾ß¸üÐÂ²Ù×÷
+	MSGID_DBMGR_DEL_ACCOUNT_CACHE = MSGTYPE_DBMGR + 19,                   //É¾ï¿½ï¿½ï¿½ËºÅ»ï¿½ï¿½æ£ºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
+	MSGID_DBMGR_UPDATE_ITEMS = MSGTYPE_DBMGR + 20,                   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý¸ï¿½ï¿½ï¿½
+	MSGID_DBMGR_LOADING_ITEMS = MSGTYPE_DBMGR + 21,                   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×°ï¿½ï¿½
+	MSGID_DBMGR_TABLE_SELECT = MSGTYPE_DBMGR + 22,                   //ï¿½ï¿½Ñ¯Ä³ï¿½Å±ï¿½
+	MSGID_DBMGR_UPDATE_BATCH = MSGTYPE_DBMGR + 23,                   //ï¿½ï¿½ï¿½ï¿½Ä³ï¿½ï¿½ï¿½Ö¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â±ï¿½ï¿½ï¿½ï¿½ï¿½
+	MSGID_DBMGR_TABLE_INSERT = MSGTYPE_DBMGR + 24,                   //ï¿½ï¿½ï¿½ï¿½Ä³ï¿½Å±ï¿½
+	MSGID_DBMGR_TABLE_EXCUTE = MSGTYPE_DBMGR + 25,                   //Ö´ï¿½ï¿½Ä³ï¿½ï¿½sql
+	MSGID_DBMGR_INCREMENTAL_UPDATE_ITEMS = MSGTYPE_DBMGR + 26,                   //Ö´ï¿½Ðµï¿½ï¿½ß¸ï¿½ï¿½Â²ï¿½ï¿½ï¿½
 	MSGID_DBMGR_TABLE2_SELECT = MSGTYPE_DBMGR + 27,
 	MSGID_DBMGR_TABLE2_INSERT = MSGTYPE_DBMGR + 28,
 	MSGID_DBMGR_TABLE2_EXCUTE = MSGTYPE_DBMGR + 29,
 
 
-	MSGID_LOG_INSERT = MSGTYPE_LOG + 1,  //ÈÕÖ¾²åÈë
-	MSGID_OTHER_HTTP_REQ = MSGTYPE_LOG + 2,  //httpÇëÇó
-	MSGID_OTHER_ADD_GLOBALBASE = MSGTYPE_LOG + 3,  //°ÑglobalµÄmailbox×¢²áµ½other½ø³Ì
-	MSGID_OTHER_YUNYING_API = MSGTYPE_LOG + 4,  //ÔËÓªÖ§³Å½Ó¿Ú
-	MSGID_OTHER_CLIENT_RESPONSE = MSGTYPE_LOG + 5,  //ÔËÓªÖ§³Å½Ó¿Ú·µ»Ø
+	MSGID_LOG_INSERT = MSGTYPE_LOG + 1,  //ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½
+	MSGID_OTHER_HTTP_REQ = MSGTYPE_LOG + 2,  //httpï¿½ï¿½ï¿½ï¿½
+	MSGID_OTHER_ADD_GLOBALBASE = MSGTYPE_LOG + 3,  //ï¿½ï¿½globalï¿½ï¿½mailbox×¢ï¿½áµ½otherï¿½ï¿½ï¿½ï¿½
+	MSGID_OTHER_YUNYING_API = MSGTYPE_LOG + 4,  //ï¿½ï¿½ÓªÖ§ï¿½Å½Ó¿ï¿½
+	MSGID_OTHER_CLIENT_RESPONSE = MSGTYPE_LOG + 5,  //ï¿½ï¿½ÓªÖ§ï¿½Å½Ó¿Ú·ï¿½ï¿½ï¿½
 
-	MSGID_OTHER_LOGIN_VERIFY = MSGTYPE_LOG + 10, //sdk·þÎñÆ÷ÑéÖ¤
-	MSGID_OTHER_PLAT_API = MSGTYPE_LOG + 11, //Æ½Ì¨½Ó¿Ú
+	MSGID_OTHER_LOGIN_VERIFY = MSGTYPE_LOG + 10, //sdkï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¤
+	MSGID_OTHER_PLAT_API = MSGTYPE_LOG + 11, //Æ½Ì¨ï¿½Ó¿ï¿½
 
-	MSGID_CROSSCLIENT_SERVER_RPC_PROXY = MSGTYPE_CROSSCLIENT + 1,              //ÄÚ²¿½ø³Ì·¢¸øcrossclient×ª·¢µÄserverRpc
+	MSGID_CROSSCLIENT_SERVER_RPC_PROXY = MSGTYPE_CROSSCLIENT + 1,              //ï¿½Ú²ï¿½ï¿½ï¿½ï¿½Ì·ï¿½ï¿½ï¿½crossclient×ªï¿½ï¿½ï¿½ï¿½serverRpc
 	MSGID_CROSSCLIENT_RPC = MSGTYPE_CROSSCLIENT + 2,
 	MSGID_CROSSCLIENT_RESP = MSGTYPE_CROSSCLIENT + 3,
 	MSGID_CROSSCLIENT_BROADCAST = MSGTYPE_CROSSCLIENT + 4,
@@ -201,9 +200,9 @@ namespace mogo
 
 	enum
 	{
-		MAILBOX_CLIENT_UNAUTHZ = 0,         //À´×ÔÓÚ¿Í»§¶ËµÄÁ¬½Ó,Î´ÑéÖ¤
-		MAILBOX_CLIENT_AUTHZ = 1,           //À´×ÔÓÚ¿Í»§¶ËµÄÁ¬½Ó,ÒÑÑéÖ¤
-		MAILBOX_CLIENT_TRUSTED = 0xf,       //À´×ÔÓÚ·þÎñÆ÷¶ËµÄ¿ÉÐÅÈÎÁ¬½Ó
+		MAILBOX_CLIENT_UNAUTHZ = 0,         //ï¿½ï¿½ï¿½ï¿½ï¿½Ú¿Í»ï¿½ï¿½Ëµï¿½ï¿½ï¿½ï¿½ï¿½,Î´ï¿½ï¿½Ö¤
+		MAILBOX_CLIENT_AUTHZ = 1,           //ï¿½ï¿½ï¿½ï¿½ï¿½Ú¿Í»ï¿½ï¿½Ëµï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½Ö¤
+		MAILBOX_CLIENT_TRUSTED = 0xf,       //ï¿½ï¿½ï¿½ï¿½ï¿½Ú·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ËµÄ¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	};
 
 	enum EFDTYPE
@@ -217,11 +216,11 @@ namespace mogo
 	enum ERPCERR
 	{
 		ERR_RPC_UNKNOWN_MSGID = -99,   //Î´Öªmsgid
-		ERR_RPC_DECODE = -98,   //½â°ü´íÎó
-		ERR_RPC_LOGIC = -97,   //Âß¼­´íÎó
+		ERR_RPC_DECODE = -98,   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		ERR_RPC_LOGIC = -97,   //ï¿½ß¼ï¿½ï¿½ï¿½ï¿½ï¿½
 	};
 
-	//¼ì²érpc½â°üÊÇ·ñ³ö´í
+	//ï¿½ï¿½ï¿½rpcï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½
 #define CHECK_RPC_DECODE_ERR(u) \
         {\
             if(u.GetDecodeErrIdx()>0)\
@@ -230,7 +229,7 @@ namespace mogo
             }\
         }
 
-	//¼ì²é²¢»ñÈ¡rpcÖÐµÄÒ»¸ö×Ö¶Î
+	//ï¿½ï¿½é²¢ï¿½ï¿½È¡rpcï¿½Ðµï¿½Ò»ï¿½ï¿½ï¿½Ö¶ï¿½
 #define CHECK_AND_GET_RPC_FIELD(u, field_var, field_type) \
         field_type field_var;\
         u >> field_var;\
@@ -240,7 +239,7 @@ namespace mogo
         }
 
 
-	//¼ì²é²¢»ñÈ¡rpcÖÐµÄÒ»¸öc_str×Ö¶Î
+	//ï¿½ï¿½é²¢ï¿½ï¿½È¡rpcï¿½Ðµï¿½Ò»ï¿½ï¿½c_strï¿½Ö¶ï¿½
 #define CHECK_AND_GET_RPC_FIELD_CSTR(u, field_var) \
         string _tmp_##field_var;\
         u >> _tmp_##field_var;\
@@ -251,7 +250,7 @@ namespace mogo
         const char* field_var = _tmp_##field_var.c_str();
 
 
-	//¼ì²é²¢»ñÈ¡rpcÖÐµÄÒ»¸öentityÊôÐÔ´ò°ü×Ö¶Î
+	//ï¿½ï¿½é²¢ï¿½ï¿½È¡rpcï¿½Ðµï¿½Ò»ï¿½ï¿½entityï¿½ï¿½ï¿½Ô´ï¿½ï¿½ï¿½Ö¶ï¿½
 #define CHECK_AND_GET_RPC_FIELD_PROPS(u, field_var) \
         VOBJECT _tmp_##field_var;\
         _tmp_##field_var.vt = V_ENTITY;\
@@ -269,7 +268,7 @@ namespace mogo
 		~CRpcUtil();
 
 	private:
-		//³õÊ¼»¯ÄÚÇ¶(·Ç×Ô¶¨Òå)µÄ·½·¨
+		//ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½Ç¶(ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½)ï¿½Ä·ï¿½ï¿½ï¿½
 		void InitInnerMethods();
 
 	public:
@@ -293,18 +292,18 @@ namespace mogo
 		T_VECTOR_OBJECT* Decode(CPluto& u);
 
 	private:
-		//½âÎöÍ¨ÓÃ¸ñÊ½(¿ÉÒÔÅäÖÃÔÚm_methodÀï)µÄrpcµ÷ÓÃ
+		//ï¿½ï¿½ï¿½ï¿½Í¨ï¿½Ã¸ï¿½Ê½(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½m_methodï¿½ï¿½)ï¿½ï¿½rpcï¿½ï¿½ï¿½ï¿½
 		T_VECTOR_OBJECT* DecodeGeneralRpc(CPluto& u);
 		T_VECTOR_OBJECT* DecodeBaseEntityRpc(CPluto& u);
 		T_VECTOR_OBJECT* DecodeCellEntityRpc(CPluto& u);
 		T_VECTOR_OBJECT* DecodeBaseClientRpc(CPluto& u);
 		T_VECTOR_OBJECT* DecodeEntityAttriSync(CPluto& u);
-		T_VECTOR_OBJECT* DecodeClientMoveReq(CPluto& u);                 //½âÎö¿Í»§¶ËÒÆ¶¯°ü
+		T_VECTOR_OBJECT* DecodeClientMoveReq(CPluto& u);                 //ï¿½ï¿½ï¿½ï¿½ï¿½Í»ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½
 		T_VECTOR_OBJECT* DecodeBroadcastClientRpc(CPluto& u);
-		T_VECTOR_OBJECT* DecodeClientOthersMoveReq(CPluto& u);           //½âÎö¿Í»§¶Ë¶ÔÆäËûÊµÌåµÄÒÆ¶¯°ü
+		T_VECTOR_OBJECT* DecodeClientOthersMoveReq(CPluto& u);           //ï¿½ï¿½ï¿½ï¿½ï¿½Í»ï¿½ï¿½Ë¶ï¿½ï¿½ï¿½ï¿½ï¿½Êµï¿½ï¿½ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½
 
 	public:
-		//´Ópluto°ü½âÎö³öentityÊôÐÔ×Ö¶ÎÁÐ±í
+		//ï¿½ï¿½plutoï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½entityï¿½ï¿½ï¿½ï¿½ï¿½Ö¶ï¿½ï¿½Ð±ï¿½
 		bool UnpickleEntityDataFromPluto(CPluto& u, TDBID& dbid, map<string, VOBJECT*> data);
 
 	private:
