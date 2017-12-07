@@ -1,8 +1,12 @@
 #pragma once
 
-class MemoryPool
-{
-public:
-	MemoryPool *next;
-};
+namespace mogo {
+
+	class MemoryPool
+	{
+	public:
+		MemoryPool *next;
+	};
+
+}
 
