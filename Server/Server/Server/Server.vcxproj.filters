@@ -1,83 +1,143 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="src">
+    <Filter Include="common">
       <UniqueIdentifier>{801e5261-aa55-4044-9fe6-c91efdf79915}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="base">
+      <UniqueIdentifier>{e6645784-e861-42a2-81ba-cfbc1d478d4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cell">
+      <UniqueIdentifier>{37455261-7a19-4f2a-9ff2-352fb6adad96}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\epoll_server.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="..\..\Common\epoll_server.cpp">
+      <Filter>common</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\mailbox.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="..\..\Common\mailbox.cpp">
+      <Filter>common</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\main.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="..\..\Common\mutex.cpp">
+      <Filter>common</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\net_util.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="..\..\Common\net_util.cpp">
+      <Filter>common</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\bitcryto.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="..\..\Common\pluto.cpp">
+      <Filter>common</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\defparser.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="..\..\Common\rpc_mogo.cpp">
+      <Filter>common</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\mutex.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="..\..\Common\type_mogo.cpp">
+      <Filter>common</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\pluto.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="..\..\Common\util.cpp">
+      <Filter>common</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\rpc_mogo.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="..\..\Common\world.cpp">
+      <Filter>common</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\type_mogo.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="..\..\Common\bitcryto.cpp">
+      <Filter>common</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\util.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="..\..\Common\defparser.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Cell\world_cell.cpp">
+      <Filter>cell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Base\world_base.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\main.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\world_select.h">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\space.cpp">
+      <Filter>cell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\entity.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\entity_cell.cpp">
+      <Filter>cell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\aoi.cpp">
+      <Filter>cell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\entity_mgr.cpp">
+      <Filter>common</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\epoll_server.h">
-      <Filter>src</Filter>
+    <ClInclude Include="..\..\Common\epoll_server.h">
+      <Filter>common</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\mailbox.h">
-      <Filter>src</Filter>
+    <ClInclude Include="..\..\Common\mailbox.h">
+      <Filter>common</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\net_util.h">
-      <Filter>src</Filter>
+    <ClInclude Include="..\..\Common\memory_pool.h">
+      <Filter>common</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\bitcryto.h">
-      <Filter>src</Filter>
+    <ClInclude Include="..\..\Common\mutex.h">
+      <Filter>common</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\defparser.h">
-      <Filter>src</Filter>
+    <ClInclude Include="..\..\Common\net_util.h">
+      <Filter>common</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\memory_pool.h">
-      <Filter>src</Filter>
+    <ClInclude Include="..\..\Common\pluto.h">
+      <Filter>common</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\mutex.h">
-      <Filter>src</Filter>
+    <ClInclude Include="..\..\Common\rpc_mogo.h">
+      <Filter>common</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\pluto.h">
-      <Filter>src</Filter>
+    <ClInclude Include="..\..\Common\type_mogo.h">
+      <Filter>common</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\rpc_mogo.h">
-      <Filter>src</Filter>
+    <ClInclude Include="..\..\Common\util.h">
+      <Filter>common</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\type_mogo.h">
-      <Filter>src</Filter>
+    <ClInclude Include="..\..\Common\world.h">
+      <Filter>common</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\util.h">
-      <Filter>src</Filter>
+    <ClInclude Include="..\..\Common\bitcryto.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Common\defparser.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Cell\world_cell.h">
+      <Filter>cell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Base\world_base.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\space.h">
+      <Filter>cell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\entity.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\entity_cell.h">
+      <Filter>cell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\aoi.h">
+      <Filter>cell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\my_stl.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\entity_mgr.h">
+      <Filter>common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\src\Makefile">
-      <Filter>src</Filter>
+    <None Include="..\..\Common\Makefile">
+      <Filter>common</Filter>
     </None>
   </ItemGroup>
 </Project>

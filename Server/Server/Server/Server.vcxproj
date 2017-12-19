@@ -18,18 +18,66 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Base\world_base.cpp" />
+    <ClCompile Include="..\..\Cell\world_cell.cpp" />
+    <ClCompile Include="..\..\common\aoi.cpp" />
+    <ClCompile Include="..\..\Common\bitcryto.cpp" />
+    <ClCompile Include="..\..\Common\defparser.cpp" />
+    <ClCompile Include="..\..\common\entity.cpp" />
+    <ClCompile Include="..\..\common\entity_cell.cpp" />
+    <ClCompile Include="..\..\common\entity_mgr.cpp" />
+    <ClCompile Include="..\..\Common\epoll_server.cpp" />
+    <ClCompile Include="..\..\Common\mailbox.cpp" />
+    <ClCompile Include="..\..\common\main.cpp" />
+    <ClCompile Include="..\..\Common\mutex.cpp" />
+    <ClCompile Include="..\..\Common\net_util.cpp" />
+    <ClCompile Include="..\..\Common\pluto.cpp" />
+    <ClCompile Include="..\..\Common\rpc_mogo.cpp" />
+    <ClCompile Include="..\..\common\space.cpp" />
+    <ClCompile Include="..\..\Common\type_mogo.cpp" />
+    <ClCompile Include="..\..\Common\util.cpp" />
+    <ClCompile Include="..\..\Common\world.cpp" />
+    <ClCompile Include="..\..\common\world_select.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Base\world_base.h" />
+    <ClInclude Include="..\..\Cell\world_cell.h" />
+    <ClInclude Include="..\..\common\aoi.h" />
+    <ClInclude Include="..\..\Common\bitcryto.h" />
+    <ClInclude Include="..\..\Common\defparser.h" />
+    <ClInclude Include="..\..\common\entity.h" />
+    <ClInclude Include="..\..\common\entity_cell.h" />
+    <ClInclude Include="..\..\common\entity_mgr.h" />
+    <ClInclude Include="..\..\Common\epoll_server.h" />
+    <ClInclude Include="..\..\Common\mailbox.h" />
+    <ClInclude Include="..\..\Common\memory_pool.h" />
+    <ClInclude Include="..\..\Common\mutex.h" />
+    <ClInclude Include="..\..\common\my_stl.h" />
+    <ClInclude Include="..\..\Common\net_util.h" />
+    <ClInclude Include="..\..\Common\pluto.h" />
+    <ClInclude Include="..\..\Common\rpc_mogo.h" />
+    <ClInclude Include="..\..\common\space.h" />
+    <ClInclude Include="..\..\Common\type_mogo.h" />
+    <ClInclude Include="..\..\Common\util.h" />
+    <ClInclude Include="..\..\Common\world.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Common\Makefile" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{170AFBBE-48BC-40C1-9A91-E4C6E3EFE2D9}</ProjectGuid>
     <RootNamespace>Server</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <ProjectName>common</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -69,12 +117,15 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)..\lib\</OutDir>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>../../common;../../base;../../cell;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -110,35 +161,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="..\src\bitcryto.cpp" />
-    <ClCompile Include="..\src\defparser.cpp" />
-    <ClCompile Include="..\src\epoll_server.cpp" />
-    <ClCompile Include="..\src\mailbox.cpp" />
-    <ClCompile Include="..\src\main.cpp" />
-    <ClCompile Include="..\src\mutex.cpp" />
-    <ClCompile Include="..\src\net_util.cpp" />
-    <ClCompile Include="..\src\pluto.cpp" />
-    <ClCompile Include="..\src\rpc_mogo.cpp" />
-    <ClCompile Include="..\src\type_mogo.cpp" />
-    <ClCompile Include="..\src\util.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\src\bitcryto.h" />
-    <ClInclude Include="..\src\defparser.h" />
-    <ClInclude Include="..\src\epoll_server.h" />
-    <ClInclude Include="..\src\mailbox.h" />
-    <ClInclude Include="..\src\memory_pool.h" />
-    <ClInclude Include="..\src\mutex.h" />
-    <ClInclude Include="..\src\net_util.h" />
-    <ClInclude Include="..\src\pluto.h" />
-    <ClInclude Include="..\src\rpc_mogo.h" />
-    <ClInclude Include="..\src\type_mogo.h" />
-    <ClInclude Include="..\src\util.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\src\Makefile" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
