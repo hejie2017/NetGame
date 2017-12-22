@@ -4,10 +4,31 @@
 #include "pluto.h"
 #include "epoll_server.h"
 #include "defparser.h"
+#include "cfg_reader.h"
 
 class CEpollServer;
 
 namespace mogo {
+
+	class CMailBoxManager
+	{
+	public:
+		CMailBoxManager();
+		~CMailBoxManager();
+
+	public:
+		bool init(CCfgReader& cfg);
+
+	public:
+		inline list<CMailBox*>& GetMailboxs()
+		{
+			return m_mbs;
+		}
+
+	private:
+		list<CMailBox*> m_mbs;
+
+	};
 
 	class world
 	{
@@ -88,12 +109,18 @@ namespace mogo {
 		{
 			return m_bDeleteFlag;
 		}
+		inline CMailBoxManager& GetMbMgr()
+		{
+			return m_mbMgr;
+		}
 	protected:
 		CDefParser m_defParser;
 		CEpollServer* the_server;
-
+		
 		CRpcUtil m_rpc;
 		bool m_bDeleteFlag;        //标记之后,pluto包不再处理
+
+		CMailBoxManager m_mbMgr;
 	};
 
 

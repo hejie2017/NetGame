@@ -30,10 +30,8 @@ class CEpollServer
 
     public:
         int StartServer(const char* pszAddr, uint16_t unPort);
-
-    public:
         int Service(const char* pszAddr, unsigned int unPort);
-
+		int ConnectMailboxs(const char* pszCfgFile);
     public:
         //服务器主动关闭一个socket
         void CloseFdFromServer(int fd);
@@ -79,7 +77,7 @@ class CEpollServer
 		vector<CMailBox*> m_serverMbs;    //服务器组件的mailbox
 
 		world* the_world;
-
+		uint16_t m_unMailboxId;
 #ifdef WIN32
 		int g_iTotalConn;
 		SOCKET g_CliSocketArr[FD_SETSIZE];// 总的套接字集合 

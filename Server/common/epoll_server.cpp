@@ -94,6 +94,8 @@ int CEpollServer::Service(const char* pszAddr, unsigned int unPort) {
 	if (nRet != 0) {
 		return nRet;
 	}
+
+	ConnectMailboxs("");
 #ifdef __linux__
 	struct epoll_event ev;
 	struct epoll_event events[MAX_EPOLL_SIZE];
@@ -254,6 +256,53 @@ int CEpollServer::Service(const char* pszAddr, unsigned int unPort) {
 	return 0;
 }
 
+int CEpollServer::ConnectMailboxs(const char* pszCfgFile)
+{
+	list<CMailBox*>& mbs = GetWorld()->GetMbMgr().GetMailboxs();
+
+	//todo,这里还要修改一下
+	//m_serverMbs.reserve(mbs.size());
+	m_serverMbs.reserve(SERVER_MAILBOX_RESERVE_SIZE);
+	for (int i = 0; i<SERVER_MAILBOX_RESERVE_SIZE; ++i)
+	{
+		m_serverMbs.push_back(NULL);
+	}
+
+	//printf("mbs.size()=%d\n", mbs.size());
+
+	list<CMailBox*>::iterator iter = mbs.begin();
+	for (; iter != mbs.end(); )
+	{
+		CMailBox* pmb = *iter;
+		if (m_unMailboxId == pmb->GetMailboxId())
+		{
+			delete pmb;
+			*iter = NULL;
+			iter = mbs.erase(iter);
+			continue;
+		}
+
+		m_serverMbs[pmb->GetMailboxId()] = pmb;
+		//printf("111_get_server_mailbox:%x\n", get_server_mailbox(pmb->get_mailbox_id()));
+
+		int nRet = pmb->ConnectServer(m_epfd);
+		if (nRet != 0)
+		{
+			return nRet;
+		}
+
+		AddFdAndMb(pmb->GetFd(), pmb);
+
+		/*LogDebug("try_to_connect_mailbox", "server=%s;port=%d",
+			pmb->GetServerName().c_str(), pmb->GetServerPort());*/
+		++iter;
+	}
+
+	//printf("get_server_mailbox:%x\n", get_server_mailbox(3));
+
+	return 0;
+}
+
 void CEpollServer::HandlePluto() {
 	while (!m_recvMsgs.empty())
 	{
@@ -263,8 +312,6 @@ void CEpollServer::HandlePluto() {
 
 		world* w = GetWorld();
 		w->FromRpcCall(*u);
-
-
 
 		////每处理一个包，则把该连接上的包数量减1
 		//CMailBox* mb = u->GetMailbox();

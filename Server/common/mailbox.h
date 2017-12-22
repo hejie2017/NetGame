@@ -28,6 +28,14 @@ class CPluto;
 		int ConnectServer(int epfd);
 		int SendAll();
 	public:
+		inline void SetServerMbType(uint16_t t)
+		{
+			m_unServerMbType = t;
+		}
+		inline uint16_t GetMailboxId() const
+		{
+			return m_id;
+		}
 		inline bool IsConnected() const
 		{
 			return m_bConnected;
@@ -104,7 +112,7 @@ class CPluto;
 		EFDTYPE m_fdType;
 		string m_serverName;
 		short m_serverPort;
-
+		uint16_t m_unServerMbType;
 		static MemoryPool *memPool;
 	};
 

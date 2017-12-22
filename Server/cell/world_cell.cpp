@@ -6,10 +6,10 @@ namespace mogo {
 	int CWorldCell::FromRpcCall(CPluto& u)
 	{
 		pluto_msgid_t msg_id = u.GetMsgId();
-		if (!CheckClientRpc(u))
+		/*if (!CheckClientRpc(u))
 		{
 			return -1;
-		}
+		}*/
 
 		T_VECTOR_OBJECT* p = m_rpc.Decode(u);
 		if (p == NULL)

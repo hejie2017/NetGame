@@ -38,6 +38,7 @@ namespace mogo {
 		map<string, VOBJECT*> m_data;
 		CEntityMailbox m_mymb;
 		bool m_bHasClient;     //是否拥有客户端
+		bool m_bIsBase;     //true:base false:cell
 	};
 
 }
