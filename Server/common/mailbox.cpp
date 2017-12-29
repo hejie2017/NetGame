@@ -60,7 +60,7 @@ using namespace mogo;
 
 	int CMailBox::SendAll()
 	{
-		if (IsConnected()) {
+		if (1) {
 			while (!m_tobeSend.empty()) {
 				CPluto* u = m_tobeSend.front();
 				int nSendWant = (int)u->GetLen() - m_nSendPos;		//期待发送的字节数

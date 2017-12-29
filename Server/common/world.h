@@ -2,9 +2,10 @@
 #define __WORLD__
 
 #include "pluto.h"
-#include "epoll_server.h"
 #include "defparser.h"
 #include "cfg_reader.h"
+#include "rpc_mogo.h"
+#include "epoll_server.h"
 
 class CEpollServer;
 
@@ -36,15 +37,21 @@ namespace mogo {
 		world();
 		virtual ~world();
 
+		int init(const char* pszEtcFile);
+
+		void InitMailboxMgr();
+
 		virtual int FromRpcCall(CPluto& u) = 0;
 
 		int OnTimerdTick(T_VECTOR_OBJECT* p);
 
 		CMailBox* GetServerMailbox(uint16_t nServerId);
 
+		void SetServer(CEpollServer* server);
 		CEpollServer* GetServer();
 
 		bool CheckClientRpc(CPluto& u);
+		void AddClientFdToVObjectList(int fd, T_VECTOR_OBJECT* p);
 
 	public:
 		template<typename T1>
@@ -114,6 +121,8 @@ namespace mogo {
 			return m_mbMgr;
 		}
 	protected:
+
+		CCfgReader* m_cfg;
 		CDefParser m_defParser;
 		CEpollServer* the_server;
 		

@@ -71,7 +71,14 @@ namespace mogo
         memset(&addr, 0, sizeof(addr));
         addr.sin_family = PF_INET;
         addr.sin_port = htons(unPort);
-        //addr.sin_addr.s_addr = inet_addr(pszAddr);
+
+#ifdef __linux__
+		addr.sin_addr.s_addr = inet_addr(pszAddr);
+#else 
+		struct in_addr s;
+		inet_pton(PF_INET, pszAddr, (void *)&s);
+		addr.sin_addr.s_addr = s.s_addr;
+#endif
 
         return connect(fd, (sockaddr*)&addr, sizeof(addr));
     }

@@ -7,14 +7,17 @@
 namespace mogo {
 	class CWorldCell :public world {
 	public:
-		CWorldCell() {}
-		~CWorldCell() {}
+		CWorldCell();
+		~CWorldCell();
 
 		int FromRpcCall(CPluto& u);
 
 		int OnTimeMove(T_VECTOR_OBJECT* p);
+		int OnClientMoveReq(T_VECTOR_OBJECT* p);
+		int CreateCellInNewSpace(T_VECTOR_OBJECT* p);
 		CSpace* GetSpace(TSPACEID id);
-
+		bool AddEntity(CEntityCell* p);
+		CEntityParent* GetEntity(TENTITYID id);
 	public:
 		inline uint16_t GetMaxObserverCount()
 		{

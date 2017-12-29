@@ -15,9 +15,12 @@ namespace mogo {
 		int FromRpcCall(CPluto& u);
 
 		int OnClientMoveReq(CPluto& u);
+		int OnAvatarPosSync(T_VECTOR_OBJECT* p);
 
 		CEntityBase* GetEntityByFd(int fd);
+		bool AddEntity(CEntityBase* p);
 		CEntityParent* GetEntity(TENTITYID id);
+		int ClientLogin(T_VECTOR_OBJECT* p,int fd);
 	private:
 		CEntityMgr<CEntityBase> m_enMgr;
 		map<int, TENTITYID> m_fd2Entity;

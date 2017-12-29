@@ -19,10 +19,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\base\entity_base.cpp" />
     <ClCompile Include="..\..\Base\world_base.cpp" />
     <ClCompile Include="..\..\Cell\world_cell.cpp" />
     <ClCompile Include="..\..\common\aoi.cpp" />
     <ClCompile Include="..\..\Common\bitcryto.cpp" />
+    <ClCompile Include="..\..\common\cfg_reader.cpp" />
     <ClCompile Include="..\..\Common\defparser.cpp" />
     <ClCompile Include="..\..\common\entity.cpp" />
     <ClCompile Include="..\..\common\entity_cell.cpp" />
@@ -41,10 +43,12 @@
     <ClCompile Include="..\..\common\world_select.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\base\entity_base.h" />
     <ClInclude Include="..\..\Base\world_base.h" />
     <ClInclude Include="..\..\Cell\world_cell.h" />
     <ClInclude Include="..\..\common\aoi.h" />
     <ClInclude Include="..\..\Common\bitcryto.h" />
+    <ClInclude Include="..\..\common\cfg_reader.h" />
     <ClInclude Include="..\..\Common\defparser.h" />
     <ClInclude Include="..\..\common\entity.h" />
     <ClInclude Include="..\..\common\entity_cell.h" />
@@ -87,7 +91,7 @@
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
@@ -120,6 +124,10 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)..\lib\</OutDir>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(SolutionDir)../lib</OutDir>
+    <IntDir>$(SolutionDir)$(Configuration)\$(ProjectName)\</IntDir>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -133,6 +141,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>../../base/;../../cell/;../../common/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

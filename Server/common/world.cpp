@@ -114,6 +114,18 @@ namespace mogo {
 
 	}
 
+	int world::init(const char* pszEtcFile)
+	{
+		m_cfg = new CCfgReader(pszEtcFile);
+		InitMailboxMgr();
+		return 0;
+	}
+
+	void world::InitMailboxMgr()
+	{
+		m_mbMgr.init(*m_cfg);
+	}
+
 	int world::OnTimerdTick(T_VECTOR_OBJECT* p)
 	{
 		if (p->size() != 1)
@@ -132,6 +144,11 @@ namespace mogo {
 	CEpollServer* world::GetServer()
 	{
 		return the_server;
+	}
+
+	void world::SetServer(CEpollServer* server) 
+	{
+		the_server = server;
 	}
 
 	CMailBox* world::GetServerMailbox(uint16_t nServerId)

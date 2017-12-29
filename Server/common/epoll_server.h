@@ -50,7 +50,19 @@ class CEpollServer
 		void HandlePluto();
 		world* GetWorld();
 		void SetWorld(world* w);
+		int HandleSendPluto();
+		CMailBox* GetClientMailbox(int32_t fd);
 	public:
+		inline void SetMailboxId(uint16_t mid)
+		{
+			m_unMailboxId = mid;
+		}
+
+		inline uint16_t GetMailboxId() const
+		{
+			return m_unMailboxId;
+		}
+
 		CMailBox* GetServerMailbox(uint16_t nServerId)
 		{
 			//printf("get_server_mailbox:%d_%d\n", nServerId, m_serverMbs.size());

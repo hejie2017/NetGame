@@ -21,7 +21,13 @@ namespace mogo
 		~CEntityBase();
 
 		int GetCellServerId();
+		int GetClientFd();
 
+	public:
+		inline void SetClientFd(int32_t fd)
+		{
+			this->m_ClientFd = fd;
+		}
 	private:
 		uint16_t m_nCellSvrId;
 		ECELLSTATE m_nCellState;

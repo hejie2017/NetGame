@@ -22,7 +22,7 @@ namespace mogo
 		string GetOptValue(const char* szSection, const char* szName, const string& strDefault);
 
 	private:
-		void ScanCfgFile();
+		int ScanCfgFile();
 
 	private:
 		string m_strFile;

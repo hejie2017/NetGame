@@ -182,11 +182,11 @@ int CEpollServer::Service(const char* pszAddr, unsigned int unPort) {
 							   // 调用select函数，timeout设置为NULL 
 		int ret = select(0, &readSet, &writeSet, NULL, NULL);
 		//
-		if (ret == SOCKET_ERROR)
-		{
-			printf("select() 失败!\n");
-			return -1;
-		}
+		//if (ret == SOCKET_ERROR)
+		//{
+		//	printf("select() 失败!\n");
+		//	return -1;
+		//}
 		// 存在套接字的I/O已经准备好 
 		if (ret > 0)
 		{
@@ -244,8 +244,11 @@ int CEpollServer::Service(const char* pszAddr, unsigned int unPort) {
 		} // end if 
 
 
-		  //处理包
+		//处理包
 		this->HandlePluto();
+
+		//发送包
+		this->HandleSendPluto();
 
 	}//end while 
 #endif
@@ -727,6 +730,32 @@ int CEpollServer::HandleMessage(int fd, CMailBox* mb)
     return -1;
 }
 
+int CEpollServer::HandleSendPluto()
+{
+	list<int> ls4del;
+	map<int, CMailBox*>::iterator iter = m_fds.begin();
+	for (; iter != m_fds.end(); ++iter)
+	{
+		CMailBox* mb = iter->second;
+		int n = mb->SendAll();
+		if (n != 0)
+		{
+			//发送失败需要关闭的连接
+			ls4del.push_back(mb->GetFd());
+		}
+	}
+
+	//关闭连接
+	while (!ls4del.empty())
+	{
+		int fd = ls4del.front();
+		CloseFdFromServer(fd);
+		ls4del.pop_front();
+	}
+
+	return 0;
+}
+
 void CEpollServer::AddRecvMsg(CPluto* u)
 {
 	m_recvMsgs.push_back(u);
@@ -765,5 +794,18 @@ int CEpollServer::CheckPlutoHeadSize(int fd, CMailBox* mb, uint32_t nMsgLen)
 	}
 
 	return 0;
+}
+
+CMailBox* CEpollServer::GetClientMailbox(int32_t fd)
+{
+	map<int, CMailBox*>::iterator iter = m_fds.find((int)fd);
+	if (iter == m_fds.end())
+	{
+		return NULL;
+	}
+	else
+	{
+		return iter->second;
+	}
 }
 

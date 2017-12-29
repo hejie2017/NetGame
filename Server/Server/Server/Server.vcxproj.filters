@@ -72,6 +72,12 @@
     <ClCompile Include="..\..\common\entity_mgr.cpp">
       <Filter>common</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\base\entity_base.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\cfg_reader.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Common\epoll_server.h">
@@ -132,6 +138,12 @@
       <Filter>common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\entity_mgr.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\base\entity_base.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\cfg_reader.h">
       <Filter>common</Filter>
     </ClInclude>
   </ItemGroup>

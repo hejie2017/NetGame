@@ -364,12 +364,12 @@ void CEntityCell::OnLeaveAoi(TENTITYID eid, bool bIsNest)
 //如果有客户端则获取并返回base的mailbox
 CMailBox* CEntityCell::GetBaseMailboxIfClient()
 {
-	if (!m_bHasClient)
-	{
-		return NULL;
-	}
+	//if (!m_bHasClient)
+	//{
+	//	return NULL;
+	//}
 
-	int nBaseId = GetBaseServerId();
+	int nBaseId = 1;
 	if (nBaseId <= 0)
 	{
 		return NULL;
@@ -505,41 +505,41 @@ CPluto* CEntityCell::SendOtherEntityPos(CPluto* u, TENTITYID eid, int16_t x, int
 			u = new CPluto;
 
 			u->Encode(MSGID_BASEAPP_AVATAR_POS_SYNC) << (uint16_t)selfCPlutoHead << m_id << x << y << (uint8_t)1 << EndPluto;
-
+			
 			mb->PushPluto(u);
 
 			return NULL;
 		}
 
-		if (u == NULL)
-		{
-			//第一个打包,其他的复制
-			u = new CPluto;
+		//if (u == NULL)
+		//{
+		//	//第一个打包,其他的复制
+		//	u = new CPluto;
 
-			u->Encode(MSGID_BASEAPP_CLIENT_MSG_VIA_BASE) << m_id << (uint16_t)otherCPlutoHead
-				<< (uint16_t)(sizeof(eid) + sizeof(x) + sizeof(y) + sizeof(checkFlag))        //可以预知长度
-				<< eid << x << y << checkFlag                                  //输入数据
-				<< EndPluto;
+		//	u->Encode(MSGID_BASEAPP_CLIENT_MSG_VIA_BASE) << m_id << (uint16_t)otherCPlutoHead
+		//		<< (uint16_t)(sizeof(eid) + sizeof(x) + sizeof(y) + sizeof(checkFlag))        //可以预知长度
+		//		<< eid << x << y << checkFlag                                  //输入数据
+		//		<< EndPluto;
 
-			//LogDebug("CEntityCell::SendOtherEntityPos 2", "u.GenLen()=%d;msg_id=%d;face=%d;x=%d;y=%d",
-			//                                               u->GetLen(), otherCPlutoHead, newFace, x, y);
+		//	//LogDebug("CEntityCell::SendOtherEntityPos 2", "u.GenLen()=%d;msg_id=%d;face=%d;x=%d;y=%d",
+		//	//                                               u->GetLen(), otherCPlutoHead, newFace, x, y);
 
-			mb->PushPluto(u);
+		//	mb->PushPluto(u);
 
-			return u;
-		}
-		else
-		{
-			CPluto* u2 = new CPluto(u->GetBuff(), u->GetLen());
-			u2->ReplaceField<uint32_t>(8, m_id);
+		//	return u;
+		//}
+		//else
+		//{
+		//	CPluto* u2 = new CPluto(u->GetBuff(), u->GetLen());
+		//	u2->ReplaceField<uint32_t>(8, m_id);
 
-			//LogDebug("CEntityCell::SendOtherEntityPos 3", "u2.GenLen()=%d;msg_id=%d;face=%d;x=%d;y=%d",
-			//                                               u2->GetLen(), otherCPlutoHead, newFace, x, y);
+		//	//LogDebug("CEntityCell::SendOtherEntityPos 3", "u2.GenLen()=%d;msg_id=%d;face=%d;x=%d;y=%d",
+		//	//                                               u2->GetLen(), otherCPlutoHead, newFace, x, y);
 
-			mb->PushPluto(u2);
+		//	mb->PushPluto(u2);
 
-			return NULL;
-		}
+		//	return NULL;
+		//}
 	}
 
 	return NULL;
@@ -604,4 +604,109 @@ bool CEntityCell::OnMoveTick()
 
 	m_bMoved = true;        //设置移动过了的标记
 	return true;
+}
+
+#ifdef __FACE
+void CEntityCell::OnClientMoveReq(uint8_t _face, int16_t x, int16_t y)
+#else
+void CEntityCell::OnClientMoveReq(int16_t x, int16_t y)
+#endif
+{
+	////当前坐标
+	//int16_t x1 = m_pos[0];
+	//int16_t y1 = m_pos[1];
+
+	//int16_t dx = x - m_pos[0];
+	//int16_t dy = y - m_pos[1];
+
+	//float df = (abs(dx) + abs(dy)) * 0.8;
+	//float df = sqrt(dx*dx + dy*dy);
+
+	//CWorldCell& world = GetWorldcell();
+
+	//if (((time1.GetLapsedTime() - this->lastMoveTime) * this->m_nSpeed) * 2 < df)
+	//{
+	//    LogWarning("CEntityCell::OnClientMoveReq", "m_id=%d;x=%d;y=%d", m_id, x, y);
+
+	//    //速度过快，记录不良移动次数，当次数超过一定限制时，服务器告诉客户端驳回    todo...
+	//    //CMailBox* mb = GetBaseMailboxIfClient();
+	//    //CPluto *u = new CPluto;
+
+	//    //u->Encode(MSGID_BASEAPP_AVATAR_POS_SYNC) << m_id << x << y << EndPluto;
+
+	//    //mb->PushPluto(u);
+
+	//    return;
+
+
+	//}
+
+
+//#ifdef __SPEED_CHECK
+//
+//
+//	struct timeval tv;
+//	if (gettimeofday(&tv, NULL) == 0)
+//	{
+//		uint32_t Now = tv.tv_usec / 1000;
+//		if (this->m_nLastMoveTime != 0 && Now > this->m_nLastMoveTime)
+//		{
+//			uint32_t TimeDis = Now - this->m_nLastMoveTime;
+
+			//float dis = Point2PointDistance(m_pos[0], m_pos[1], x, y);
+			////LogDebug("CEntityCell::OnClientMoveReq", "m_id=%d;m_pos[0]=%d;m_pos[1]=%d;x=%d;y=%d;dis=%f;TimeDis=%d",
+			////                                          m_id, m_pos[0], m_pos[1], x, y, dis, TimeDis);
+			////m_nSpeed是以秒速度，计算的时候转换成毫秒速度
+			//if (!CheckSpeed(this->m_nSpeed * 1000, TimeDis, dis))
+			//{
+			//	//数度校验演不通过，则把客户端拉回原来的坐标点
+			//	CSpace* sp = GetMySpace();
+			//	if (sp)
+			//	{
+
+	m_pos[0] = x;
+	m_pos[1] = y;
+					//同步坐标给自己的客户端
+					this->SendOtherEntityPos(NULL, m_id, m_pos[0], m_pos[1], 0,
+						MSGID_CLIENT_ENTITY_POS_TELEPORT, MSGID_CLIENT_OTHER_ENTITY_TELEPORT);
+
+				//	sp->TelePortLocally(this, m_pos[0], m_pos[1]);
+
+				//
+				//}
+
+				//return;
+//			}
+//			else
+//			{
+//				this->m_nLastMoveTime = Now;
+//			}
+//		}
+//		else
+//		{
+//			this->m_nLastMoveTime = Now;
+//		}
+//	}
+//
+//
+//#endif
+
+
+	if (m_pos[0] != x || m_pos[1] != y)
+	{
+		m_bBroadcast = true;
+	}
+
+	m_pos[0] = x;
+	m_pos[1] = y;
+
+
+#ifdef __FACE
+	face = _face;
+#endif
+
+	//this->BroadcastPos();
+
+
+	return;
 }

@@ -82,12 +82,12 @@ namespace mogo
 	}
 
 
-	void CCfgReader::ScanCfgFile()
+	int CCfgReader::ScanCfgFile()
 	{
 		ifstream file(m_strFile.c_str(), ios::in);
 		if (!file.is_open())
 		{
-			//ThrowException(-1, "open config file failed: %s", m_strFile.c_str());
+			return 1;
 		}
 
 		string strSection;

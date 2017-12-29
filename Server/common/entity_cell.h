@@ -28,9 +28,10 @@ namespace mogo
 		CSpace* GetMySpace();
 		CMailBox* GetBaseMailboxIfClient();
 		bool BroadcastPos();
-		CPluto* CEntityCell::SendOtherEntityPos(CPluto* u, TENTITYID eid, int16_t x, int16_t y, uint32_t checkFlag,
+		CPluto* SendOtherEntityPos(CPluto* u, TENTITYID eid, int16_t x, int16_t y, uint32_t checkFlag,
 			pluto_msgid_t selfCPlutoHead, pluto_msgid_t otherCPlutoHead);
 		bool OnMoveTick();
+		void OnClientMoveReq(int16_t x, int16_t y);
 
 		bool AddInFollowers(TENTITYID eid);
 		bool AddInObservers(TENTITYID eid);

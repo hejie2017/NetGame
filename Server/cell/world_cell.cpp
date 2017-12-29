@@ -1,7 +1,15 @@
 #include "world_cell.h"
 #include "rpc_mogo.h"
+#include "world_select.h"
 
 namespace mogo {
+
+	CWorldCell::CWorldCell() :world() {
+		CreateCellInNewSpace(NULL);
+	}
+	CWorldCell::~CWorldCell() {
+
+	}
 
 	int CWorldCell::FromRpcCall(CPluto& u)
 	{
@@ -32,11 +40,11 @@ namespace mogo {
 			nRet = OnTimerdTick(p);
 			break;
 		}
-		//case MSGID_CELLAPP_CREATE_CELL_IN_NEW_SPACE:
-		//{
-		//	nRet = CreateCellInNewSpace(p);
-		//	break;
-		//}
+		case MSGID_CELLAPP_CREATE_CELL_IN_NEW_SPACE:
+		{
+			nRet = CreateCellInNewSpace(p);
+			break;
+		}
 
 		//case MSGID_CELLAPP_CREATE_CELL_VIA_MYCELL:
 		//{
@@ -68,11 +76,11 @@ namespace mogo {
 		//	nRet = PickleAoiEntities(p);
 		//	break;
 		//}
-		//case MSGID_CELLAPP_CLIENT_MOVE_REQ:
-		//{
-		//	nRet = OnClientMoveReq(p);
-		//	break;
-		//}
+		case MSGID_CELLAPP_CLIENT_MOVE_REQ:
+		{
+			nRet = OnClientMoveReq(p);
+			break;
+		}
 		//case MSGID_CELLAPP_CLIENT_OTHERS_MOVE_REQ:
 		//{
 		//	nRet = OnClientOthersMoveReq(p);
@@ -134,6 +142,57 @@ namespace mogo {
 		return 0;
 	}
 
+	int CWorldCell::OnClientMoveReq(T_VECTOR_OBJECT* p)
+	{
+		//printf("CWorldCell::on_client_move_req\n");
+#ifdef __FACE
+		if (p->size() < 4)
+		{
+			return -1;
+		}
+#else
+		if (p->size() < 3)
+		{
+			return -1;
+		}
+#endif
+		TENTITYID eid = VOBJECT_GET_U32((*p)[0]);
+		CEntityCell* pCell = (CEntityCell*)GetEntity(eid);
+		if (pCell)
+		{
+
+#ifdef __FACE
+			uint8_t face = VOBJECT_GET_U8((*p)[1]);
+			int16_t x = VOBJECT_GET_I16((*p)[2]);
+			int16_t y = VOBJECT_GET_I16((*p)[3]);
+#else
+			int16_t x = VOBJECT_GET_I16((*p)[1]);
+			int16_t y = VOBJECT_GET_I16((*p)[2]);
+#endif
+
+
+#ifdef __FACE
+			pCell->OnClientMoveReq(face, x, y);
+#else
+			printf("%d ", x);
+			pCell->OnClientMoveReq(x, y);
+#endif
+
+		}
+
+		return 0;
+	}
+
+	bool CWorldCell::AddEntity(CEntityCell* p)
+	{
+		return m_enMgr.AddEntity(p);
+	}
+
+	CEntityParent* CWorldCell::GetEntity(TENTITYID id)
+	{
+		return (CEntityParent*)m_enMgr.GetEntity(id);
+	}
+
 	CSpace* CWorldCell::GetSpace(TSPACEID id)
 	{
 		map<TSPACEID, CSpace*>::const_iterator iter = m_spaces.find(id);
@@ -153,6 +212,16 @@ namespace mogo {
 				return NULL;
 			}
 		}
+	}
+
+	int CWorldCell::CreateCellInNewSpace(T_VECTOR_OBJECT* p)
+	{
+		//TENTITYTYPE entity_type = GetWorld()->GetDefParser().GetTypeId(pszTypeName);
+
+		CEntityCell* e = new CEntityCell(2,2);
+		this->AddEntity(e);
+
+		return 0;
 	}
 
 }

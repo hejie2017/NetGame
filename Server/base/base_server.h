@@ -1,7 +1,7 @@
 #ifndef __BASE_SERVER__
 #define __BASE_SERVER__
 
-#include "epoll_server.h"
+#include "../common/epoll_server.h"
 
 class CBaseServer:public CEpollServer
 {
